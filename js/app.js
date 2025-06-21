@@ -7,22 +7,23 @@ function addToCart(name, price, image) {
   updateCartCount();
 }
 
-// Update Cart Count Badge
+// Update Cart Count Badge (both desktop & mobile)
 function updateCartCount() {
-  const cartCountElement = document.getElementById('cart-count');
-  if (cartCountElement) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cartCountElement.textContent = cart.length;
-  }
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const countDesktop = document.getElementById('cart-count');
+  const countMobile = document.getElementById('cart-count-mobile');
+
+  if (countDesktop) countDesktop.textContent = cart.length;
+  if (countMobile) countMobile.textContent = cart.length;
 }
 
 // Load Cart Items on Cart Page
 function loadCartItems() {
-  const cartItemsContainer = document.getElementById('cartItems');
-  if (cartItemsContainer) {
+  const container = document.getElementById('cartItems');
+  if (container) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let total = 0;
-    cartItemsContainer.innerHTML = '';
+    container.innerHTML = '';
 
     cart.forEach((item, index) => {
       let div = document.createElement('div');
@@ -34,7 +35,7 @@ function loadCartItems() {
         </div>
         <button onclick="removeItem(${index})" class="text-red-600 text-xl">❌</button>
       `;
-      cartItemsContainer.appendChild(div);
+      container.appendChild(div);
       total += item.price;
     });
 
@@ -73,7 +74,7 @@ function handleOrderForm() {
   }
 }
 
-// Load Order Summary
+// Load Order Summary Page
 function loadOrderSummary() {
   const summary = document.getElementById('orderSummary');
   if (summary) {
@@ -90,7 +91,6 @@ function loadOrderSummary() {
     });
 
     document.getElementById('totalAmount').textContent = `Total: ₹${total}`;
-
     document.getElementById('customerDetails').innerHTML = `
       <p><strong>Name:</strong> ${customer.name}</p>
       <p><strong>Mobile:</strong> ${customer.mobile}</p>
@@ -98,14 +98,14 @@ function loadOrderSummary() {
       <p><strong>City:</strong> ${customer.city}</p>
     `;
 
-    // Clear only cart and customerDetails
+    // Clear cart & details after displaying
     localStorage.removeItem('cart');
     localStorage.removeItem('customerDetails');
     updateCartCount();
   }
 }
 
-// User Signup
+// Signup
 function signupUser() {
   const name = document.getElementById("signupName").value;
   const email = document.getElementById("signupEmail").value;
@@ -116,13 +116,12 @@ function signupUser() {
     return;
   }
 
-  const newUser = { name, email, password };
-  localStorage.setItem("pizzaUser", JSON.stringify(newUser));
+  localStorage.setItem("pizzaUser", JSON.stringify({ name, email, password }));
   alert("Signup successful! Please login now.");
   window.location.href = "login.html";
 }
 
-// User Login
+// Login
 function loginUser() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
@@ -137,24 +136,25 @@ function loginUser() {
   }
 }
 
-// Display Logged-in User
+// Show User Info / Login Links in Navbar (Desktop & Mobile)
 function checkLoginStatus() {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
-  const userArea = document.getElementById("userArea");
+  const headerArea = document.getElementById("userAreaHeader");
+  const mobileArea = document.getElementById("userAreaMobile");
 
-  if (userArea) {
-    if (user) {
-      userArea.innerHTML = `
-        <span class="mr-3">Welcome, ${user.name}</span>
-        <a href="#" onclick="logoutUser()" class="underline">Logout</a>
-      `;
-    } else {
-      userArea.innerHTML = `
-        <a href="login.html" class="underline mr-3">Login</a>
-        <a href="signup.html" class="underline">Sign Up</a>
-      `;
-    }
+  let html = '';
+
+  if (user) {
+    html = `<span class="mr-3">Hi, ${user.name}</span> <a href="#" onclick="logoutUser()" class="underline">Logout</a>`;
+  } else {
+    html = `
+      <a href="login.html" class="underline mr-3">Login</a>
+      <a href="signup.html" class="underline">Sign Up</a>
+    `;
   }
+
+  if (headerArea) headerArea.innerHTML = html;
+  if (mobileArea) mobileArea.innerHTML = html;
 }
 
 // Logout
@@ -163,16 +163,15 @@ function logoutUser() {
   window.location.reload();
 }
 
-// Protect Cart / Checkout (Optional)
+// Protect Restricted Pages
 function protectPage() {
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!user) {
+  if (!localStorage.getItem("loggedInUser")) {
     alert("Please login first.");
     window.location.href = "login.html";
   }
 }
 
-// Initial Setup on Page Load
+// Page Initialization
 document.addEventListener('DOMContentLoaded', () => {
   updateCartCount();
   loadCartItems();
@@ -180,14 +179,28 @@ document.addEventListener('DOMContentLoaded', () => {
   loadOrderSummary();
   checkLoginStatus();
 
-  
-  // 🍕 Mobile Menu Toggle
-  const menuToggle = document.getElementById("menuToggle");
-  const mobileMenu = document.getElementById("mobileMenu");
+  // Protect restricted pages
+  const restrictedPages = ['cart.html', 'order-summary.html'];
+  const currentPage = window.location.pathname.split("/").pop();
+  if (restrictedPages.includes(currentPage)) {
+    protectPage();
+  }
 
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
+  // 🍕 Mobile Menu Toggle
+  const toggle = document.getElementById("menuToggle");
+  const mobile = document.getElementById("mobileMenu");
+  const closeBtn = document.getElementById("menuClose");
+
+  if (toggle && mobile) {
+    toggle.addEventListener("click", () => {
+      mobile.classList.remove("hidden");
+    });
+  }
+
+  if (closeBtn && mobile) {
+    closeBtn.addEventListener("click", () => {
+      mobile.classList.add("hidden");
     });
   }
 });
+
