@@ -179,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadOrderSummary();
   checkLoginStatus();
 
-  // Protect restricted pages
   const restrictedPages = ['cart.html', 'order-summary.html'];
   const currentPage = window.location.pathname.split("/").pop();
   if (restrictedPages.includes(currentPage)) {
@@ -202,5 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
       mobile.classList.add("hidden");
     });
   }
-});
 
+  // ✅ Login Form Handler
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      loginUser();
+    });
+  }
+});
