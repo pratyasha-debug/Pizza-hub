@@ -66,6 +66,7 @@ document.getElementById("menuClose")?.addEventListener('click', () => {
 
 function toggleSidebar() {
   document.getElementById("sidebar")?.classList.toggle("hidden");
+  checkUserSession(); 
 }
 
 // =================== Category Filter ===================
