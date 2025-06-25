@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Your Cart | Pizza Hub</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pizza Hub 🍕 | Track Order</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+
+<body class="bg-gray-50 font-sans text-gray-800">
 
 <!-- Navbar -->
 <nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
   <a href="index.html" class="flex items-center gap-3">
-    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
-      🍕
-    </div>
+    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">🍕</div>
     <h1 class="text-2xl font-extrabold tracking-wide font-sans">Pizza <span class="text-yellow-300">Hub</span></h1>
   </a>
 
-  <!-- Navigation Links -->
-  <div class="hidden md:flex space-x-6 text-lg font-medium">
+  <div class="hidden md:flex space-x-6 text-lg font-medium items-center">
     <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
     <a href="order_history.html" class="hover:text-yellow-300 transition">Order History</a>
     <a href="cart.html" class="relative hover:text-yellow-300 transition">
-      Cart
-      <span id="cart-count"
-        class="absolute -top-3 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
     </a>
     <a href="feedback.html" class="hover:text-yellow-300 transition">Feedback</a>
   </div>
 
-  <!-- Mobile Menu Icon -->
   <button id="menuToggle" class="md:hidden text-3xl focus:outline-none"><i class="fas fa-bars"></i></button>
 </nav>
 
@@ -39,94 +35,76 @@
   <button id="menuClose" class="text-white text-3xl self-end focus:outline-none">✕</button>
   <a href="index.html" class="text-white text-lg hover:text-yellow-300">Home</a>
   <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Order History</a>
-  <a href="cart.html" class="text-white text-lg hover:text-yellow-300 relative">
+  <a href="cart.html" class="relative text-white text-lg hover:text-yellow-300">
     Cart
-    <span id="cart-count-mobile"
-      class="absolute -top-2 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+    <span id="cart-count-mobile" class="absolute -top-2 -right-6 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
   </a>
   <a href="feedback.html" class="text-white text-lg hover:text-yellow-300">Feedback</a>
 </div>
 
-<div class="max-w-4xl mx-auto p-6 bg-white mt-6 rounded-lg shadow space-y-6">
-  <div id="cartItems" class="space-y-4"></div>
-  <div id="emptyMessage" class="text-center text-gray-600 text-lg hidden">Your cart is empty.</div>
-  <div id="cartSummary" class="text-right space-y-3 hidden">
-    <div class="text-xl font-bold">Total: ₹<span id="cartTotal"></span></div>
-    <button onclick="proceedToCheckout()"
-      class="bg-[#e31837] text-white px-6 py-3 rounded-md hover:bg-[#c7152f] text-base font-semibold transition">
-      Proceed to Checkout
-    </button>
+<!-- Main Content -->
+<main class="max-w-2xl mx-auto p-6">
+  <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Track Your Order 📦</h2>
+
+  <div class="bg-white rounded-xl shadow-lg p-6 space-y-4">
+    <div>
+      <label for="orderId" class="block text-gray-700 font-medium mb-2">Enter Order ID:</label>
+      <input type="text" id="orderId" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 outline-none" placeholder="e.g. ORD1023">
+    </div>
+
+    <button onclick="trackOrder()" class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition">🔍 Track Now</button>
+
+    <div id="orderStatus" class="hidden mt-6 p-4 rounded-lg text-lg font-medium transition-all duration-300"></div>
   </div>
-</div>
 
+  <div class="text-center mt-8 text-gray-600 text-sm">
+    Having issues? <a href="support.html" class="text-red-600 hover:underline">Contact Support</a>
+  </div>
+</main>
+
+<!-- Scripts -->
 <script>
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartItemsDiv = document.getElementById("cartItems");
-  const cartSummary = document.getElementById("cartSummary");
-  const emptyMessage = document.getElementById("emptyMessage");
+  // Track Order function
+  function trackOrder() {
+    const orderId = document.getElementById('orderId').value.trim();
+    const statusBox = document.getElementById('orderStatus');
 
-  if (cart.length === 0) {
-    emptyMessage.classList.remove("hidden");
-  } else {
-    let total = 0;
-    cart.forEach((item, index) => {
-      const itemTotal = item.price;
-      total += itemTotal;
-      const itemDiv = document.createElement("div");
-      itemDiv.className = "flex items-center gap-4 border-b pb-4";
-      itemDiv.innerHTML = `
-        <img src="${item.image}" class="w-24 h-24 object-cover rounded-lg">
-        <div class="flex-1">
-          <h3 class="text-lg font-bold text-gray-800">${item.name}</h3>
-          <p class="text-gray-500">Qty: ${item.quantity}</p>
-          <p class="text-yellow-600 font-semibold mt-1">₹${item.price}</p>
-        </div>
-        <button onclick="removeItem(${index})" class="text-red-600 text-sm hover:underline">Remove</button>
-      `;
-      cartItemsDiv.appendChild(itemDiv);
-    });
-
-    document.getElementById("cartTotal").innerText = total;
-    cartSummary.classList.remove("hidden");
-  }
-
-  function removeItem(index) {
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    location.reload();
-  }
-
-  function proceedToCheckout() {
-    window.location.href = "checkout.html";
-  }
-
-  // Cart badge update
-  function updateCartCount() {
-    const count = cart.length;
-    const desktopBadge = document.getElementById("cart-count");
-    const mobileBadge = document.getElementById("cart-count-mobile");
-
-    if (count > 0) {
-      desktopBadge.innerText = count;
-      desktopBadge.classList.remove("hidden");
-      mobileBadge.innerText = count;
-      mobileBadge.classList.remove("hidden");
-    } else {
-      desktopBadge.classList.add("hidden");
-      mobileBadge.classList.add("hidden");
+    if (!orderId) {
+      statusBox.className = 'mt-6 p-4 rounded-lg bg-yellow-100 text-yellow-800 text-lg font-medium transition-all duration-300';
+      statusBox.innerText = '⚠️ Please enter a valid Order ID.';
+      statusBox.classList.remove('hidden');
+      return;
     }
-  }
 
-  updateCartCount();
+    const statuses = ['Order received 🍕', 'Being prepared 👨‍🍳', 'Out for delivery 🚴‍♂️', 'Delivered ✅'];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+    statusBox.className = 'mt-6 p-4 rounded-lg bg-green-100 text-green-800 text-lg font-medium transition-all duration-300';
+    statusBox.innerText = `📦 Status: ${randomStatus}`;
+    statusBox.classList.remove('hidden');
+  }
 
   // Mobile menu toggle
-  document.getElementById("menuToggle").addEventListener("click", () => {
+  document.getElementById("menuToggle").addEventListener('click', () => {
     document.getElementById("mobileMenu").classList.toggle("hidden");
+    updateCartCount();
   });
-  document.getElementById("menuClose").addEventListener("click", () => {
+  document.getElementById("menuClose").addEventListener('click', () => {
     document.getElementById("mobileMenu").classList.add("hidden");
   });
 
+  // Cart count updater
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.length;
+    const badge = document.getElementById("cart-count");
+    const badgeMobile = document.getElementById("cart-count-mobile");
+    if (badge) badge.innerText = count;
+    if (badgeMobile) badgeMobile.innerText = count;
+  }
+
+  // Update count on page load
+  document.addEventListener("DOMContentLoaded", updateCartCount);
 </script>
 <!-- //footer -->
 <footer class="bg-[#e31837] text-white">

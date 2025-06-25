@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Support | Pizza Hub 🍕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 font-sans text-gray-800">
+
+<!-- Navbar -->
+<nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
+  <a href="index.html" class="flex items-center gap-3">
+    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
+      🍕
+    </div>
+    <h1 class="text-2xl font-extrabold tracking-wide">Pizza <span class="text-yellow-300">Hub</span></h1>
+  </a>
+  <div class="hidden md:flex space-x-6 text-lg font-medium items-center">
+    <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
+    <a href="order_history.html" class="hover:text-yellow-300 transition">Orders</a>
+    <a href="cart.html" class="relative text-white hover:text-yellow-300 transition">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+    </a>
+    <a href="support.html" class="text-yellow-300">Support</a>
+  </div>
+  <button id="menuToggle" class="md:hidden text-3xl focus:outline-none">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
+  <button id="menuClose" class="text-white text-3xl self-end">✕</button>
+  <a href="index.html" class="text-white text-lg hover:text-yellow-300">Home</a>
+  <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Orders</a>
+  <a href="cart.html" class="relative text-white text-lg hover:text-yellow-300">
+    Cart
+    <span id="cart-count-mobile" class="absolute -top-2 -right-6 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+  </a>
+  <a href="support.html" class="text-yellow-300">Support</a>
+</div>
+
+<!-- Contact Support -->
+<main class="max-w-3xl mx-auto p-6 mt-10">
+  <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Contact Support 📞</h2>
+  <p class="text-center text-gray-600 mb-8">Have a question, issue or feedback? We'd love to hear from you.</p>
+
+  <form id="supportForm" class="bg-white shadow-lg rounded-xl p-8 space-y-5">
+    <input type="text" id="name" placeholder="Your Name" required
+      class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none">
+    <input type="email" id="email" placeholder="Your Email" required
+      class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none">
+    <textarea id="message" rows="4" placeholder="Your Message" required
+      class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none"></textarea>
+
+    <button type="submit"
+      class="bg-green-600 text-white w-full py-3 rounded text-lg font-semibold hover:bg-green-700 transition">
+      📩 Submit Message
+    </button>
+  </form>
+
+  <div id="successMessage" class="hidden mt-6 text-green-700 text-xl text-center font-semibold">✅ Thank you for contacting us. We'll respond shortly!</div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-red-600 text-white text-center py-4 mt-12">
+  <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+  <div class="mt-2 space-x-6 text-2xl">
+    <a href="#" class="hover:text-yellow-300"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" class="hover:text-yellow-300"><i class="fab fa-instagram"></i></a>
+    <a href="#" class="hover:text-yellow-300"><i class="fab fa-twitter"></i></a>
+  </div>
+</footer>
+
+<!-- Script -->
+<script>
+  // Navigation toggle handlers
+  document.getElementById("menuToggle").onclick = () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+    updateCartCount();
+  };
+  document.getElementById("menuClose").onclick = () => {
+    document.getElementById("mobileMenu").classList.add("hidden");
+  };
+
+  // Contact form handler
+  document.getElementById("supportForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    document.getElementById("successMessage").classList.remove("hidden");
+    this.reset();
+  });
+
+  // Cart count update
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.length;
+    if (document.getElementById("cart-count")) {
+      document.getElementById("cart-count").innerText = count;
+    }
+    if (document.getElementById("cart-count-mobile")) {
+      document.getElementById("cart-count-mobile").innerText = count;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", updateCartCount);
+</script>
+<!-- //footer -->
+<footer class="bg-[#e31837] text-white">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
+
+    <!-- Brand Section -->
+    <div>
+      <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
+        <span class="text-yellow-400">🍕</span> Pizza Hub
+      </h2>
+      <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
+
+      <!-- Social Icons -->
+      <div class="flex gap-4 mt-4 text-lg">
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="flex flex-col gap-3 text-sm font-medium">
+      <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+      <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
+      <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
+      <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
+      <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="flex flex-col gap-3 text-sm font-medium">
+      <h3 class="text-lg font-semibold mb-2">Contact</h3>
+      <p>📞 +91 98765 43210</p>
+      <p>✉️ support@pizzahub.com</p>
+      <p>📍 Bhubaneswar, Odisha</p>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
+    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+    <div class="flex gap-4 text-sm">
+      <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
+      <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

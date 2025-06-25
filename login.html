@@ -2,50 +2,89 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login | Pizza Hub</title>
+  <title>Login | Pizza Hub 🍕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
-<body class="bg-yellow-50 text-gray-800 font-sans">
+<body class="bg-gradient-to-br from-yellow-50 to-orange-100 flex flex-col min-h-screen">
 
-  <header class="bg-red-600 shadow-lg sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      <h1 class="text-3xl font-extrabold text-white">Pizza Hub 🍕</h1>
-      <div class="hidden md:flex space-x-6 items-center">
-        <a href="index.html#menu" class="text-white text-lg hover:underline">Menu</a>
-        <a href="cart.html" class="relative text-white text-lg hover:underline">
-          Cart 🛒 <span id="cart-count" class="absolute -top-3 -right-4 bg-yellow-400 text-black rounded-full text-sm px-2">0</span>
-        </a>
-        <span id="userAreaHeader" class="text-white"></span>
+  <!-- Main Content -->
+  <main class="flex-grow flex items-center justify-center">
+
+    <form onsubmit="event.preventDefault(); loginUser();" class="bg-white p-6 rounded-xl text-center space-y-4 w-80 shadow-lg">
+      <h2 class="text-2xl font-bold text-red-600">Login 🍕</h2>
+
+      <div class="text-left">
+        <label for="loginName" class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+        <input id="loginName" type="text" placeholder="Your Name" class="border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-red-400" required />
       </div>
-      <button id="menuToggle" class="md:hidden text-white text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
-    </div>
-    <div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
-      <button id="menuClose" class="text-white text-2xl self-end focus:outline-none"><i class="fas fa-times"></i></button>
-      <a href="index.html#menu" class="text-white text-lg hover:underline">Menu</a>
-      <a href="cart.html" class="relative text-white text-lg hover:underline">
-        Cart 🛒 <span id="cart-count-mobile" class="absolute -top-3 -right-4 bg-yellow-400 text-black rounded-full text-sm px-2">0</span>
-      </a>
-      <div id="userAreaMobile" class="text-white space-y-2"></div>
-    </div>
-  </header>
 
-  <section class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-lg shadow">
-    <h2 class="text-3xl font-bold mb-6 text-center text-red-600">Login 🍕</h2>
-    <form id="loginForm" class="space-y-4">
-      <input id="loginEmail" type="email" autocomplete="email" placeholder="Email" required class="border p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none">
-      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" required class="border p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none">
-      <button type="submit" class="bg-red-600 text-white py-3 w-full rounded hover:bg-red-700">Login</button>
+      <div class="text-left">
+        <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input id="loginPassword" type="password" placeholder="Password" class="border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-red-400" required />
+      </div>
+
+      <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded w-full hover:bg-red-700 transition">Login</button>
+
+      <p class="text-sm text-gray-600">Don’t have an account? 
+        <a href="signup.html" class="text-red-600 font-semibold hover:underline">Register</a>
+      </p>
     </form>
-    <p class="text-center text-sm mt-4">Don't have an account? <a href="signup.html" class="text-red-600 underline">Sign Up</a></p>
-  </section>
 
-  <footer class="bg-red-600 text-white text-center py-4 mt-10">
-    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#e31837] text-white mt-12">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
+
+      <!-- Brand Section -->
+      <div>
+        <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
+          <span class="text-yellow-400">🍕</span> Pizza Hub
+        </h2>
+        <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
+
+        <!-- Social Icons -->
+        <div class="flex gap-4 mt-4 text-lg">
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col gap-3 text-sm font-medium">
+        <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+        <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
+        <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
+        <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
+        <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
+      </div>
+
+      <!-- Contact -->
+      <div class="flex flex-col gap-3 text-sm font-medium">
+        <h3 class="text-lg font-semibold mb-2">Contact</h3>
+        <p>📞 +91 98765 43210</p>
+        <p>✉️ support@pizzahub.com</p>
+        <p>📍 Bhubaneswar, Odisha</p>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
+      <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+      <div class="flex gap-4 text-sm">
+        <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
+        <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
+      </div>
+    </div>
   </footer>
 
   <script src="js/app.js"></script>
+
 </body>
 </html>

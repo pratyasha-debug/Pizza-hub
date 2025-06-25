@@ -2,164 +2,581 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pizza Hub 🍕 | Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pizza Hub 🍕</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-gradient-to-br from-yellow-50 to-orange-100 text-gray-800 font-sans">
+<body class="bg-yellow-50 ">
 
-  <header class="bg-red-600 shadow-lg sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      <h1 class="text-3xl font-extrabold text-white">Pizza Hub 🍕</h1>
-      <div class="hidden md:flex space-x-6 items-center">
-        <a href="index.html#menu" class="text-white text-lg hover:underline">Menu</a>
-        <a href="cart.html" class="relative text-white text-lg hover:underline">
-          Cart 🛒 <span id="cart-count" class="absolute -top-3 -right-4 bg-yellow-400 text-black rounded-full text-sm px-2">0</span>
-        </a>
-        <span id="userAreaHeader" class="text-white"></span>
-      </div>
-      <button id="menuToggle" class="md:hidden text-white text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+<!-- Signup Modal -->
+<div id="signupModal" class=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <form onsubmit="event.preventDefault(); createAccount();"  class="bg-white p-6 rounded-xl text-center space-y-4 w-80">
+    <h2 class="text-2xl font-bold">Create an Account 🍕</h2>
+
+    <input id="signupName" type="text" placeholder="Name" class="border p-2 w-full rounded" />
+    <input id="signupEmail" type="email" placeholder="Email" class="border p-2 w-full rounded" />
+    <input id="signupPassword" type="password" placeholder="Password" class="border p-2 w-full rounded" />
+
+    <!-- Location input with detect button -->
+    <div class="flex space-x-2">
+      <input id="signupLocation" type="text" placeholder="Your Location" class="border p-2 w-full rounded" />
+      <button type="button" onclick="autoDetectLocation()" class="bg-blue-500 text-white px-2 rounded">📍</button>
     </div>
-    <div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
-      <button id="menuClose" class="text-white text-2xl self-end focus:outline-none"><i class="fas fa-times"></i></button>
-      <a href="index.html#menu" class="text-white text-lg hover:underline">Menu</a>
-      <a href="cart.html" class="relative text-white text-lg hover:underline">
-        Cart 🛒 <span id="cart-count-mobile" class="absolute -top-3 -right-4 bg-yellow-400 text-black rounded-full text-sm px-2">0</span>
-      </a>
-      <div id="userAreaMobile" class="text-white space-y-2"></div>
+
+    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded w-full">Sign Up</button>
+
+    <button type="button" onclick="skipSignup()" class="text-gray-500">Skip for now</button>
+
+    <p class="text-sm text-gray-600">Already have an account?</p>
+    <a href="login.html" class="text-red-600 font-semibold hover:underline">🔐 Login here</a>
+  </form>
+</div>
+
+
+<!-- Alert -->
+<div id="locationAlert" class="hidden alert"></div>
+
+<!-- Navbar -->
+<header class="bg-[#e31837] text-white p-4 flex justify-between items-center shadow-lg sticky top-0 z-50">
+  <!-- Logo Section -->
+  <div class="flex items-center space-x-3">
+    <div class="bg-yellow-400 text-[#e31837] rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
+      🍕
     </div>
-  </header>
-  
-  <!-- Hero Banner -->
-  <section class="relative overflow-hidden">
-    <img src="https://media.istockphoto.com/id/2161225691/vector/chef-cook-presenting-delicious-pizza-fast-food-restaurant-italian-cuisine-logo-or-emblem.jpg?s=612x612&w=0&k=20&c=kYqGIRwWUArAr4pj7EjT8f8FohVPd73i0kcr6BEX0Vk="
-      alt="Pizza Banner" loading="lazy"
-      class="w-full h-[300px] md:h-[450px] object-cover object-center">
-    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center p-4 text-center">
-      <h2 class="text-4xl md:text-5xl text-white font-extrabold leading-tight drop-shadow">Order Hot & Fresh Pizza Online!</h2>
-      <a href="#menu" class="mt-5 bg-yellow-400 text-black font-bold px-7 py-3 rounded-full hover:bg-yellow-300 transition">Order Now 🍕</a>
+    <h1 class="text-2xl font-extrabold tracking-wide font-sans">Pizza <span class="text-yellow-300">Hub</span></h1>
+  </div>
+
+  <!-- Actions Section -->
+  <div class="flex items-center space-x-4 text-lg">
+    <!-- Location Icon -->
+    <div class="flex items-center gap-1">
+      <i class="fas fa-map-marker-alt text-yellow-300"></i>
+      <span id="userLocation" class="text-sm font-medium">Your City</span>
     </div>
-  </section>
 
-  <!-- Menu Section -->
-  <section id="menu" class="max-w-7xl mx-auto px-6 py-14">
-    <h2 class="text-4xl font-bold mb-10 text-center text-gray-800 drop-shadow">🍕 Our Bestselling Pizzas</h2>
+    <!-- Cart Icon -->
+    <a href="cart.html" class="relative text-white hover:text-yellow-300 transition">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+    </a>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <!-- User Icon / Sidebar Toggle -->
+    <button onclick="toggleSidebar()" class="hover:text-yellow-300 transition">
+      <i class="fas fa-user-circle text-2xl"></i>
+    </button>
 
-      <!-- Pizza Cards (1–8) -->
-      <!-- Pizza 1 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt="Margherita"
-          class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Margherita</h3>
-          <p class="text-lg mb-3">₹250</p>
-          <button onclick="addToCart('Margherita', 250, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
+    
+  </div>
+</header>
 
-      <!-- Pizza 2 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://images.unsplash.com/photo-1555072956-7758afb20e8f?q=80&w=800&auto=format&fit=crop" alt="Farmhouse"
-          class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Farmhouse</h3>
-          <p class="text-lg mb-3">₹300</p>
-          <button onclick="addToCart('Farmhouse', 300, 'https://images.unsplash.com/photo-1555072956-7758afb20e8f?q=80&w=800&auto=format&fit=crop')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
 
-      <!-- Pizza 3 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://plus.unsplash.com/premium_photo-1673439305009-821f62df6d31?w=800&auto=format&fit=crop"
-          alt="Peppy Paneer" class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Peppy Paneer</h3>
-          <p class="text-lg mb-3">₹350</p>
-          <button onclick="addToCart('Peppy Paneer', 350, 'https://plus.unsplash.com/premium_photo-1673439305009-821f62df6d31?w=800&auto=format&fit=crop')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
+<!-- Sidebar -->
+<!-- Sidebar -->
+<div id="sidebar" class="fixed top-0 left-0 bg-white h-full w-72 p-6 shadow-2xl hidden z-[100] flex flex-col justify-between">
 
-      <!-- Pizza 4 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://images.unsplash.com/photo-1613564834361-9436948817d1?q=80&w=800&auto=format&fit=crop"
-          alt="Cheese Burst" class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Cheese Burst</h3>
-          <p class="text-lg mb-3">₹400</p>
-          <button onclick="addToCart('Cheese Burst', 400, 'https://images.unsplash.com/photo-1613564834361-9436948817d1?q=80&w=800&auto=format&fit=crop')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Pizza 5 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://plus.unsplash.com/premium_photo-1667682942148-a0c98d1d70db?w=800&auto=format&fit=crop"
-          alt="Veggie Paradise" class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Veggie Paradise</h3>
-          <p class="text-lg mb-3">₹280</p>
-          <button onclick="addToCart('Veggie Paradise', 280, 'https://plus.unsplash.com/premium_photo-1667682942148-a0c98d1d70db?w=800&auto=format&fit=crop')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Pizza 6 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=800&auto=format&fit=crop&q=60"
-          alt="Double Cheese" class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Double Cheese</h3>
-          <p class="text-lg mb-3">₹320</p>
-          <button onclick="addToCart('Double Cheese', 320, 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=800&auto=format&fit=crop&q=60')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Pizza 7 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=500&auto=format&fit=crop&q=60"
-          alt="Mexican Delight" class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Mexican Delight</h3>
-          <p class="text-lg mb-3">₹360</p>
-          <button onclick="addToCart('Mexican Delight', 360, 'https://images.unsplash.com/photo-1571066811602-716837d681de?w=500&auto=format&fit=crop&q=60')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Pizza 8 -->
-      <div class="bg-white border rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
-        <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=500&auto=format&fit=crop&q=60"
-          alt="Chicken Supreme" class="w-full h-64 object-cover rounded-t-xl">
-        <div class="p-4 text-center">
-          <h3 class="text-xl font-bold mb-2">Chicken Supreme</h3>
-          <p class="text-lg mb-3">₹400</p>
-          <button onclick="addToCart('Chicken Supreme', 400, 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=500&auto=format&fit=crop&q=60')"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg">Add to Cart</button>
-        </div>
-      </div>
-
+  <!-- Header -->
+  <div>
+    <div class="flex items-center justify-between mb-6">
+      <h2 id="sidebarUserName" class="text-2xl font-bold flex items-center gap-2">
+        <i class="fas fa-user-circle"></i> Guest
+      </h2>
+      <button onclick="toggleSidebar()" class="text-red-600 text-3xl">&times;</button>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="bg-gradient-to-r from-red-600 to-red-700 text-white text-center py-6 mt-16">
-    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
-    <div class="mt-3 space-x-6 text-2xl">
-      <a href="#" class="hover:text-yellow-300"><i class="fab fa-facebook-f"></i></a>
-      <a href="#" class="hover:text-yellow-300"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="hover:text-yellow-300"><i class="fab fa-twitter"></i></a>
+    <!-- Action Buttons -->
+    <a href="best_experience.html">
+      <button class="w-full bg-red-600 text-white py-2 rounded-lg mb-3 hover:bg-red-700 transition">
+        ✨ Best Experience
+      </button>
+    </a>
+    
+    <a href="login.html" class="block w-full border py-2 rounded-lg text-center text-red-600 font-semibold mb-4 hover:bg-red-50 transition">🔐 Login</a>
+
+    <!-- Navigation Links -->
+    <nav class="border-t pt-4 space-y-3 text-lg font-medium text-gray-700">
+      <a href="offer.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-fire"></i> Deals & Offers</a>
+      <a href="track_order.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-receipt"></i> Track Order</a>
+      <a href="order_history.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-box"></i> Order History</a>
+      <a href="feedback.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-comment-dots"></i> Feedback</a>
+      <a href="terms_and_conditions.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-file-alt"></i> Terms & Conditions</a>
+      <a href="bulk_order.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-users"></i> Bulk Order</a>
+      <a href="nutrition.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-apple-alt"></i> Nutrition</a>
+    </nav>
+  </div>
+
+  <!-- Footer Logout -->
+  <div class="border-t pt-4">
+    <button onclick="logoutUser()" class="w-full border text-red-600 font-semibold py-2 rounded-lg hover:bg-red-50 transition flex items-center justify-center gap-2">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+<!-- Hero Section -->
+<section class="relative h-[650px] flex items-center justify-center text-center overflow-hidden font-sans">
+
+  <!-- Background Image with Slow Zoom Animation -->
+  <img src="images/pizzabanner.jpg" alt="Delicious pizza background"
+       class="absolute inset-0 w-full h-full object-cover animate-slowZoom" />
+
+  <!-- Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/50 to-black/80"></div>
+
+  <!-- Content with FadeUp Animation -->
+  <div class="relative z-10 text-white max-w-3xl px-6 animate-fadeUp">
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight drop-shadow-2xl text-yellow-400 animate-bounceIn">
+      🍕 Fresh, Hot & Cheesy Pizzas
+    </h1>
+
+    <p class="text-2xl text-gray-200 mb-8 font-medium drop-shadow-lg">
+      Order your favorite flavors online — crispy, cheesy goodness delivered fast.
+    </p>
+
+    <!-- Detect Location Button with PulseGlow & Hover Effects -->
+    <button onclick="getLocation()"
+      class="bg-gradient-to-r from-yellow-400 to-red-600 hover:from-yellow-500 hover:to-red-700
+             text-black font-semibold px-8 py-4 rounded-full shadow-2xl text-lg transition transform 
+             hover:scale-110 hover:-translate-y-1 animate-pulseGlow">
+      📍 Detect My Location
+    </button>
+  </div>
+</section>
+
+<div class="flex flex-wrap gap-4 my-6 pl-80">
+
+  <!-- Delivery -->
+  <button
+    onclick="selectService('Delivery')"
+    data-service="Delivery"
+    class="service-btn flex items-center gap-3 bg-[#e31837] hover:bg-[#c7152f] text-white px-8 py-4 rounded-full font-medium shadow-lg transition-all duration-300 ease-in-out hover:scale-105">
+    <i class="fas fa-motorcycle text-xl"></i>
+    <span class="text-lg">Delivery (30 min)</span>
+  </button>
+
+  <!-- Takeaway -->
+  <button
+    onclick="selectService('Takeaway')"
+    data-service="Takeaway"
+    class="service-btn flex items-center gap-3 bg-gray-800 hover:bg-gray-900 text-white px-8 py-4 rounded-full font-medium shadow-lg transition-all duration-300 ease-in-out hover:scale-105">
+    <i class="fas fa-shopping-bag text-xl"></i>
+    <span class="text-lg">Takeaway</span>
+  </button>
+
+  <!-- Dine-in -->
+  <button
+    onclick="selectService('Dine-in')"
+    data-service="Dine-in"
+    class="service-btn flex items-center gap-3 bg-[#facc15] hover:bg-yellow-400 text-black px-8 py-4 rounded-full font-medium shadow-lg transition-all duration-300 ease-in-out hover:scale-105">
+    <i class="fas fa-chair text-xl"></i>
+    <span class="text-lg">Dine-in</span>
+  </button>
+
+  <!-- Show All -->
+  <button
+    onclick="showAllServicePizzas()"
+    class="flex items-center gap-2 bg-[#4ade80] hover:bg-[#22c55e] text-white px-8 py-4 rounded-full font-medium shadow-lg transition-all duration-300 ease-in-out hover:scale-105">
+    <i class="fas fa-pizza-slice text-xl"></i>
+    <span class="text-lg">Show All</span>
+  </button>
+
+</div>
+
+
+
+
+
+  <!-- Pizza Section -->
+  <!-- Pizza Categories Section -->
+<section id="menu" class="px-4 sm:px-10 py-6">
+  <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">What are you craving for? 🍕</h1>
+
+  <!-- Category Filters -->
+  <div class="flex gap-12 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4">
+
+    <!-- Category Card -->
+    <a href="all_pizzas.html?category=all" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">All Pizzas</h3>
+    </a>
+
+    <!-- Big Big Pizza -->
+    <a href="all_pizzas.html?category=Big%20Big%20Pizza" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://tse1.mm.bing.net/th?id=OIP.teMOBnBMUBaCB0VN7-2sEgHaEJ&pid=Api&P=0&h=180"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Big Big Pizza</h3>
+    </a>
+
+    <!-- Chicken Burst -->
+    <a href="all_pizzas.html?category=Chicken%20Burst" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://www.tasteofhome.com/wp-content/uploads/2017/10/Pesto-Chicken-Pizza_exps39454_CFD1646754D1_RMS.jpg"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Chicken Burst</h3>
+    </a>
+
+    <!-- Cheese Burst -->
+    <a href="all_pizzas.html?category=Cheese%20Burst" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://tse3.mm.bing.net/th?id=OIP.L6FZ0EnHckPd9Se-Lk4VwwHaEJ&pid=Api&P=0&h=180"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Cheese Burst</h3>
+    </a>
+
+    <!-- 5 Course Meal -->
+    <a href="all_pizzas.html?category=5%20Course%20Meal" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://i.ytimg.com/vi/vm_UFRFQKbc/oardefault.jpg"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">5 Course Meal</h3>
+    </a>
+
+    <!-- Veg Pizza -->
+    <a href="all_pizzas.html?category=Veg%20Pizza" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://tse4.mm.bing.net/th?id=OIP.nWxwqZPLh0yhD3YoK8Ee7QHaE7&pid=Api&P=0&h=180"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Veg Pizza</h3>
+    </a>
+
+    <!-- Cheese Volcano -->
+    <a href="all_pizzas.html?category=Cheese%20Volcano" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2024/7/4/3e08f33d-98b7-41d2-acca-182da98e80f4_dd0b2e67-2a47-4a5e-b906-63e1277e7fa2.jpg"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Cheese Volcano</h3>
+    </a>
+
+    <!-- Pizza Mania -->
+    <a href="all_pizzas.html?category=Pizza%20Mania" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://tse1.mm.bing.net/th?id=OIP.GtG0utA7lecZMaO_sUJ8MQHaFv&pid=Api&P=0&h=180"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Pizza Mania</h3>
+    </a>
+
+    <!-- Value Combos -->
+    <a href="all_pizzas.html?category=Value%20Combos" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://tse1.mm.bing.net/th?id=OIP.NbpFJnGdjhdES_KPI3WUxwHaHa&pid=Api&P=0&h=180"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Value Combos</h3>
+    </a>
+
+    <!-- Garlic Breads -->
+    <a href="all_pizzas.html?category=Garlic%20Breads" class="flex flex-col items-center flex-shrink-0 snap-start hover:scale-105 transition duration-300">
+      <img src="https://tse2.mm.bing.net/th?id=OIP.Dj_XZJc_wHnroUzMiVGzMwHaLG&pid=Api&P=0&h=180"
+        class="w-24 h-24 rounded-full object-cover border-4 border-transparent hover:border-yellow-400 shadow-md">
+      <h3 class="mt-2 text-base font-semibold text-gray-800">Garlic Breads</h3>
+    </a>
+
+  </div>
+</section>
+
+<!-- Cart Popup -->
+<div id="cartPopup"
+  class="fixed bottom-28 right-4 bg-green-600 text-white px-4 py-2 rounded shadow hidden z-50 text-sm font-medium">
+  Added to cart!
+</div>
+
+    <div class="flex flex-col items-center text-center mb-8">
+      <img src="https://static.vecteezy.com/system/resources/previews/000/576/961/original/gold-royal-crown-logo-template-illustration-design-vector-eps-10.jpg" alt="Crown Logo" class="w-20 h-20 object-contain mb-2">
+      <h1 class="text-2xl font-bold">
+        <span class="text-yellow-400">Top 10</span>
+        <span class="text-yellow-700">Bestsellers</span>
+      </h1>
+      <p class="text-sm text-gray-600">In Your Locality</p>
     </div>
-  </footer>
-  
-  <script src="js/app.js"></script>
-  
-</body>
-</html>
+
+    <body class="bg-gray-50 min-h-screen flex flex-col">
+
+      <!-- Main content -->
+      <main class="flex-1 p-4 pb-28"> <!-- pb-28 to give space for sticky footer -->
+    
+        <!-- Grid of Pizzas -->
+        <div id="pizzaCards"class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    
+          <!-- Card 1 -->
+          <div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Takeaway">
+            <div class="w-full h-[160px] overflow-hidden">
+              <img src="https://images.dominos.co.in/new_margherita.jpg" alt="Margherita"
+                class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+            </div>
+            <div class="p-3">
+              <h3 class="text-sm font-semibold text-gray-800">Margherita</h3>
+              <p class="text-xs text-gray-500">Classic mozzarella delight.</p>
+              <p class="text-base font-semibold text-yellow-500 my-2">₹109</p>
+              <div class="flex gap-1">
+                <button onclick="addToCart('Margherita', 109, 'https://images.dominos.co.in/new_margherita.jpg')"
+                  class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+                <a href="customize.html?pizza=Margherita&price=109&image=https://images.dominos.co.in/new_margherita.jpg"
+                  class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Card 2 -->
+          <div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Delivery">
+            <div class="w-full h-[160px] overflow-hidden">
+              <img src="https://images.dominos.co.in/IndianTandooriPaneer.jpg" alt="Paneer Tandoori"
+                class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+            </div>
+            <div class="p-3">
+              <h3 class="text-sm font-semibold text-gray-800">Paneer Tandoori</h3>
+              <p class="text-xs text-gray-500">Spicy paneer with capsicum.</p>
+              <p class="text-base font-semibold text-yellow-500 my-2">₹299</p>
+              <div class="flex gap-1">
+                <button onclick="addToCart('Paneer Tandoori', 299, 'https://images.dominos.co.in/IndianTandooriPaneer.jpg')"
+                  class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+                <a href="customize.html?pizza=Paneer Tandoori&price=299&image=https://images.dominos.co.in/IndianTandooriPaneer.jpg"
+                  class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+              </div>
+            </div>
+          </div>
+    
+<!-- 3 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden"  data-service="Dine-in">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://product-assets.faasos.io/production/product/image_1669628712219_Low_IFC_Corn_and_Cheese_Pizza.jpg" alt="Golden Corn"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Golden Corn</h3>
+    <p class="text-xs text-gray-500">Juicy corn topping pizza.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹259</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Golden Corn', 259, 'https://product-assets.faasos.io/production/product/image_1669628712219_Low_IFC_Corn_and_Cheese_Pizza.jpg')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Golden Corn&price=259&image=https://product-assets.faasos.io/production/product/image_1669628712219_Low_IFC_Corn_and_Cheese_Pizza.jpg"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Takeaway">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://www.sustainablecooks.com/wp-content/uploads/2022/12/FS-Onion-Pizza-3-1024x1536.jpg" alt="Onion Pizza"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Onion Pizza</h3>
+    <p class="text-xs text-gray-500">Crunchy onions on top.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹199</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Onion Pizza', 199, 'https://www.sustainablecooks.com/wp-content/uploads/2022/12/FS-Onion-Pizza-3-1024x1536.jpg')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Onion Pizza&price=199&image=https://www.sustainablecooks.com/wp-content/uploads/2022/12/FS-Onion-Pizza-3-1024x1536.jpg"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Delivery">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://www.yellowblissroad.com/wp-content/uploads/2021/11/Homemade-Breadsticks-lg-21.jpg" alt="Garlic Bread"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Garlic Bread</h3>
+    <p class="text-xs text-gray-500">Crispy garlic sticks.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹159</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Garlic Bread', 159, 'https://www.yellowblissroad.com/wp-content/uploads/2021/11/Homemade-Breadsticks-lg-21.jpg')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Garlic Bread&price=159&image=https://www.yellowblissroad.com/wp-content/uploads/2021/11/Homemade-Breadsticks-lg-21.jpg"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden"  data-service="Dine-in">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1593504049359-74330189a345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGl6emF8ZW58MHx8MHx8fDA%3D" alt="Burger Pizza"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Burger Pizza</h3>
+    <p class="text-xs text-gray-500">Pizza inside a burger bun.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹199</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Burger Pizza', 199, 'https://images.unsplash.com/photo-1593504049359-74330189a345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGl6emF8ZW58MHx8MHx8fDA%3D')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Burger Pizza&price=199&image=https://images.unsplash.com/photo-1593504049359-74330189a345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGl6emF8ZW58MHx8MHx8fDA%3D"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Takeaway">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Loaded Veggie"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Loaded Veggie</h3>
+    <p class="text-xs text-gray-500">Fully loaded veg toppings.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹329</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Loaded Veggie', 329, 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Loaded Veggie&price=329&image=https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Delivery">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://plus.unsplash.com/premium_photo-1673439305009-821f62df6d31?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBpenphfGVufDB8fDB8fHww" alt="Pepper Barbecue"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Pepper Barbecue</h3>
+    <p class="text-xs text-gray-500">Spicy barbecue topping.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹349</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Pepper Barbecue', 349, 'https://plus.unsplash.com/premium_photo-1673439305009-821f62df6d31?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBpenphfGVufDB8fDB8fHww')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Pepper Barbecue&price=349&image=https://plus.unsplash.com/premium_photo-1673439305009-821f62df6d31?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBpenphfGVufDB8fDB8fHww"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+<!-- 9 -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden"  data-service="Dine-in">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://plus.unsplash.com/premium_photo-1690056321981-dfe9e75e0247?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Chicken Fiesta"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Chicken Fiesta</h3>
+    <p class="text-xs text-gray-500">Chicken chunks with onion & capsicum.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹399</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Chicken Fiesta', 399, 'https://plus.unsplash.com/premium_photo-1690056321981-dfe9e75e0247?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Chicken Fiesta&price=399&image=https://plus.unsplash.com/premium_photo-1690056321981-dfe9e75e0247?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- 9 to 12 -->
+<!-- Repeat same pattern, just replace image, title, desc, price, and addToCart details -->
+
+<!-- Farmhouse Delight -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Takeaway">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://media.istockphoto.com/id/1795499728/photo/heart-shaped-pepperoni-pizza.jpg?s=612x612&w=is&k=20&c=ruYdXGRjp55kloyPUy8aVHeQEqB2PE4kplH1PZVD1DQ=" 
+      alt="Farmhouse Delight"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Farmhouse Delight</h3>
+    <p class="text-xs text-gray-500">Loaded with fresh veggies & cheese.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹349</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Farmhouse Delight', 349, 'https://media.istockphoto.com/id/1795499728/photo/heart-shaped-pepperoni-pizza.jpg?s=612x612&w=is&k=20&c=ruYdXGRjp55kloyPUy8aVHeQEqB2PE4kplH1PZVD1DQ=')" 
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Farmhouse Delight&price=349&image=https://media.istockphoto.com/id/1795499728/photo/heart-shaped-pepperoni-pizza.jpg?s=612x612&w=is&k=20&c=ruYdXGRjp55kloyPUy8aVHeQEqB2PE4kplH1PZVD1DQ=" 
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- Pepperoni Treat -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden" data-service="Delivery">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1552539618-7eec9b4d1796?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fHBpenphfGVufDB8fDB8fHww" 
+      alt="Pepperoni Treat"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Pepperoni Treat</h3>
+    <p class="text-xs text-gray-500">Classic pepperoni & melted cheese.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹459</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Pepperoni Treat', 459, 'https://images.unsplash.com/photo-1552539618-7eec9b4d1796?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fHBpenphfGVufDB8fDB8fHww')" 
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Pepperoni Treat&price=459&image=https://images.unsplash.com/photo-1552539618-7eec9b4d1796?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fHBpenphfGVufDB8fDB8fHww" 
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+<!-- Double Cheese Burst -->
+<div class="bg-white rounded-lg shadow hover:shadow-xl overflow-hidden"  data-service="Dine-in">
+  <div class="w-full h-[160px] overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzR8fHBpenphfGVufDB8fDB8fHww" 
+      alt="Double Cheese Burst"
+      class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+  </div>
+  <div class="p-3">
+    <h3 class="text-sm font-semibold text-gray-800">Double Cheese Burst</h3>
+    <p class="text-xs text-gray-500">Ultimate loaded mozzarella layers.</p>
+    <p class="text-base font-semibold text-yellow-500 my-2">₹389</p>
+    <div class="flex gap-1">
+      <button onclick="addToCart('Double Cheese Burst', 389, 'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzR8fHBpenphfGVufDB8fDB8fHww')" 
+        class="flex-1 bg-[#e31837] hover:bg-[#c7152f] text-white text-xs py-1 rounded">Add</button>
+      <a href="customize.html?pizza=Double Cheese Burst&price=389&image=https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzR8fHBpenphfGVufDB8fDB8fHww" 
+        class="flex-1 border border-[#e31837] text-[#e31837] hover:bg-[#ffe6e9] text-xs py-1 rounded text-center">⚙️ Customize</a>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </main>
+      <!-- //footer -->
+      <footer class="bg-[#e31837] text-white">
+        <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
+      
+          <!-- Brand Section -->
+          <div>
+            <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
+              <span class="text-yellow-400">🍕</span> Pizza Hub
+            </h2>
+            <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
+      
+            <!-- Social Icons -->
+            <div class="flex gap-4 mt-4 text-lg">
+              <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+      
+          <!-- Quick Links -->
+          <div class="flex flex-col gap-3 text-sm font-medium">
+            <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+            <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
+            <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
+            <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
+            <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
+          </div>
+      
+          <!-- Contact -->
+          <div class="flex flex-col gap-3 text-sm font-medium">
+            <h3 class="text-lg font-semibold mb-2">Contact</h3>
+            <p>📞 +91 98765 43210</p>
+            <p>✉️ support@pizzahub.com</p>
+            <p>📍 Bhubaneswar, Odisha</p>
+          </div>
+      
+        </div>
+      
+        <!-- Bottom Bar -->
+        <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
+          <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+          <div class="flex gap-4 text-sm">
+            <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
+            <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
+          </div>
+        </div>
+      </footer>
+      
+    
+      <script src="js/app.js"></script>
+    </body>
+    
+    </html>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Your Cart | Pizza Hub</title>
   <meta charset="UTF-8">
+  <title>Terms & Conditions | Pizza Hub 🍕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 font-sans">
 
 <!-- Navbar -->
 <nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
@@ -15,22 +15,19 @@
     <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
       🍕
     </div>
-    <h1 class="text-2xl font-extrabold tracking-wide font-sans">Pizza <span class="text-yellow-300">Hub</span></h1>
+    <h1 class="text-2xl font-extrabold tracking-wide">Pizza <span class="text-yellow-300">Hub</span></h1>
   </a>
 
-  <!-- Navigation Links -->
-  <div class="hidden md:flex space-x-6 text-lg font-medium">
+  <div class="hidden md:flex space-x-6 text-lg font-medium items-center">
     <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
     <a href="order_history.html" class="hover:text-yellow-300 transition">Order History</a>
     <a href="cart.html" class="relative hover:text-yellow-300 transition">
-      Cart
-      <span id="cart-count"
-        class="absolute -top-3 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
     </a>
     <a href="feedback.html" class="hover:text-yellow-300 transition">Feedback</a>
   </div>
 
-  <!-- Mobile Menu Icon -->
   <button id="menuToggle" class="md:hidden text-3xl focus:outline-none"><i class="fas fa-bars"></i></button>
 </nav>
 
@@ -41,85 +38,52 @@
   <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Order History</a>
   <a href="cart.html" class="text-white text-lg hover:text-yellow-300 relative">
     Cart
-    <span id="cart-count-mobile"
-      class="absolute -top-2 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+    <span id="cart-count-mobile" class="absolute -top-2 -right-6 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
   </a>
   <a href="feedback.html" class="text-white text-lg hover:text-yellow-300">Feedback</a>
 </div>
 
-<div class="max-w-4xl mx-auto p-6 bg-white mt-6 rounded-lg shadow space-y-6">
-  <div id="cartItems" class="space-y-4"></div>
-  <div id="emptyMessage" class="text-center text-gray-600 text-lg hidden">Your cart is empty.</div>
-  <div id="cartSummary" class="text-right space-y-3 hidden">
-    <div class="text-xl font-bold">Total: ₹<span id="cartTotal"></span></div>
-    <button onclick="proceedToCheckout()"
-      class="bg-[#e31837] text-white px-6 py-3 rounded-md hover:bg-[#c7152f] text-base font-semibold transition">
-      Proceed to Checkout
-    </button>
+<!-- Page Heading -->
+<div class="text-center py-10 animate-fade-in">
+  <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800">Terms & Conditions</h2>
+  <p class="text-gray-500 mt-3 text-lg">Please read carefully before placing an order 🍕</p>
+</div>
+
+<!-- Content -->
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md space-y-8 text-gray-700 leading-relaxed animate-fade-in">
+  <div>
+    <h3 class="text-2xl font-bold text-red-600">1️⃣ Ordering</h3>
+    <p class="mt-2">All orders must be placed through our official website. Orders cannot be cancelled once prepared.</p>
+  </div>
+
+  <div>
+    <h3 class="text-2xl font-bold text-red-600">2️⃣ Payment</h3>
+    <p class="mt-2">We accept UPI, Debit/Credit cards, and Cash on Delivery (COD) where applicable. All online payments must be confirmed before order processing.</p>
+  </div>
+
+  <div>
+    <h3 class="text-2xl font-bold text-red-600">3️⃣ Delivery</h3>
+    <p class="mt-2">Estimated delivery time is 30–45 minutes. Delays might occur due to weather or traffic conditions.</p>
+  </div>
+
+  <div>
+    <h3 class="text-2xl font-bold text-red-600">4️⃣ Refunds</h3>
+    <p class="mt-2">Refunds will be issued for failed payments or undelivered orders within 5–7 business days.</p>
+  </div>
+
+  <div>
+    <h3 class="text-2xl font-bold text-red-600">5️⃣ Bulk Orders</h3>
+    <p class="mt-2">Bulk orders (above ₹3000) must be placed at least 24 hours in advance via our <a href="bulk_order.html" class="text-red-500 font-medium underline hover:text-red-600">Bulk Order Request Form</a>.</p>
   </div>
 </div>
 
+<!-- Footer -->
+<footer class="text-center text-gray-500 text-sm py-6 mt-12">
+  &copy; 2025 <span class="text-[#e31837] font-semibold">Pizza Hub 🍕</span>. All rights reserved.
+</footer>
+
+<!-- JS for Mobile Menu + Cart Count -->
 <script>
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartItemsDiv = document.getElementById("cartItems");
-  const cartSummary = document.getElementById("cartSummary");
-  const emptyMessage = document.getElementById("emptyMessage");
-
-  if (cart.length === 0) {
-    emptyMessage.classList.remove("hidden");
-  } else {
-    let total = 0;
-    cart.forEach((item, index) => {
-      const itemTotal = item.price;
-      total += itemTotal;
-      const itemDiv = document.createElement("div");
-      itemDiv.className = "flex items-center gap-4 border-b pb-4";
-      itemDiv.innerHTML = `
-        <img src="${item.image}" class="w-24 h-24 object-cover rounded-lg">
-        <div class="flex-1">
-          <h3 class="text-lg font-bold text-gray-800">${item.name}</h3>
-          <p class="text-gray-500">Qty: ${item.quantity}</p>
-          <p class="text-yellow-600 font-semibold mt-1">₹${item.price}</p>
-        </div>
-        <button onclick="removeItem(${index})" class="text-red-600 text-sm hover:underline">Remove</button>
-      `;
-      cartItemsDiv.appendChild(itemDiv);
-    });
-
-    document.getElementById("cartTotal").innerText = total;
-    cartSummary.classList.remove("hidden");
-  }
-
-  function removeItem(index) {
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    location.reload();
-  }
-
-  function proceedToCheckout() {
-    window.location.href = "checkout.html";
-  }
-
-  // Cart badge update
-  function updateCartCount() {
-    const count = cart.length;
-    const desktopBadge = document.getElementById("cart-count");
-    const mobileBadge = document.getElementById("cart-count-mobile");
-
-    if (count > 0) {
-      desktopBadge.innerText = count;
-      desktopBadge.classList.remove("hidden");
-      mobileBadge.innerText = count;
-      mobileBadge.classList.remove("hidden");
-    } else {
-      desktopBadge.classList.add("hidden");
-      mobileBadge.classList.add("hidden");
-    }
-  }
-
-  updateCartCount();
-
-  // Mobile menu toggle
   document.getElementById("menuToggle").addEventListener("click", () => {
     document.getElementById("mobileMenu").classList.toggle("hidden");
   });
@@ -127,7 +91,28 @@
     document.getElementById("mobileMenu").classList.add("hidden");
   });
 
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.length;
+    const badge = document.getElementById("cart-count");
+    const badgeMobile = document.getElementById("cart-count-mobile");
+    if (badge) badge.innerText = count;
+    if (badgeMobile) badgeMobile.innerText = count;
+  }
+
+  document.addEventListener("DOMContentLoaded", updateCartCount);
 </script>
+
+<!-- Simple Fade-in Animation via Tailwind plugin -->
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 <!-- //footer -->
 <footer class="bg-[#e31837] text-white">
   <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">

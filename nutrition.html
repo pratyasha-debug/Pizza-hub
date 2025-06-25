@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nutrition Info | Pizza Hub 🍕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans">
+
+<!-- Navbar -->
+<nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
+  <a href="index.html" class="flex items-center gap-3">
+    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">🍕</div>
+    <h1 class="text-2xl font-extrabold tracking-wide">Pizza <span class="text-yellow-300">Hub</span></h1>
+  </a>
+
+  <div class="hidden md:flex space-x-6 text-lg font-medium items-center">
+    <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
+    <a href="order_history.html" class="hover:text-yellow-300 transition">Orders</a>
+    <a href="cart.html" class="relative hover:text-yellow-300 transition">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+    </a>
+    <a href="feedback.html" class="hover:text-yellow-300 transition">Feedback</a>
+  </div>
+
+  <button id="menuToggle" class="md:hidden text-3xl focus:outline-none"><i class="fas fa-bars"></i></button>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
+  <button id="menuClose" class="text-white text-3xl self-end">✕</button>
+  <a href="index.html" class="text-white text-lg hover:text-yellow-300">Home</a>
+  <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Orders</a>
+  <a href="cart.html" class="text-white text-lg hover:text-yellow-300 relative">
+    Cart
+    <span id="cart-count-mobile" class="absolute -top-2 -right-6 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+  </a>
+  <a href="feedback.html" class="text-white text-lg hover:text-yellow-300">Feedback</a>
+</div>
+
+<!-- Hero Section -->
+<div class="bg-cover bg-center h-56 flex items-center justify-center text-white animate-fade-in"
+     style="background-image: url('images/nutrition-banner.jpg');">
+  <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg">Nutrition Information</h2>
+</div>
+
+<!-- Introduction -->
+<div class="max-w-5xl mx-auto py-8 px-4 text-center animate-fade-in">
+  <p class="text-gray-600 text-lg leading-relaxed">
+    At <span class="font-bold text-[#e31837]">Pizza Hub 🍕</span>, we care about your health and happiness. Here’s a breakdown of the nutritional values for our bestselling pizzas and sides.
+  </p>
+  <a href="assets/PizzaHub_NutritionInfo.pdf"
+     class="mt-6 inline-block bg-gradient-to-r from-yellow-400 to-red-600 text-black font-semibold px-8 py-3 rounded-full shadow-lg hover:scale-105 transition"
+     download>
+     📄 Download Nutrition PDF
+  </a>
+</div>
+
+<!-- Nutrition Table -->
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-md animate-fade-in">
+  <h3 class="text-2xl font-bold text-gray-800 mb-6">Pizza Nutritional Facts (per medium slice)</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full border text-sm text-gray-700">
+      <thead class="bg-yellow-100">
+        <tr>
+          <th class="border p-3 text-left font-semibold">Item</th>
+          <th class="border p-3 text-center">Calories</th>
+          <th class="border p-3 text-center">Protein (g)</th>
+          <th class="border p-3 text-center">Carbs (g)</th>
+          <th class="border p-3 text-center">Fats (g)</th>
+          <th class="border p-3 text-center">Sodium (mg)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hover:bg-red-50">
+          <td class="border p-3">Margherita Pizza</td>
+          <td class="border p-3 text-center">220</td>
+          <td class="border p-3 text-center">9</td>
+          <td class="border p-3 text-center">28</td>
+          <td class="border p-3 text-center">9</td>
+          <td class="border p-3 text-center">560</td>
+        </tr>
+        <tr class="bg-gray-50 hover:bg-red-50">
+          <td class="border p-3">Pepperoni Pizza</td>
+          <td class="border p-3 text-center">290</td>
+          <td class="border p-3 text-center">11</td>
+          <td class="border p-3 text-center">30</td>
+          <td class="border p-3 text-center">14</td>
+          <td class="border p-3 text-center">780</td>
+        </tr>
+        <tr class="hover:bg-red-50">
+          <td class="border p-3">Veggie Supreme</td>
+          <td class="border p-3 text-center">240</td>
+          <td class="border p-3 text-center">10</td>
+          <td class="border p-3 text-center">29</td>
+          <td class="border p-3 text-center">10</td>
+          <td class="border p-3 text-center">620</td>
+        </tr>
+        <tr class="bg-gray-50 hover:bg-red-50">
+          <td class="border p-3">Garlic Breadsticks (2 pcs)</td>
+          <td class="border p-3 text-center">170</td>
+          <td class="border p-3 text-center">4</td>
+          <td class="border p-3 text-center">22</td>
+          <td class="border p-3 text-center">6</td>
+          <td class="border p-3 text-center">450</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Disclaimer -->
+<div class="max-w-4xl mx-auto text-center text-gray-500 text-sm mt-6">
+  * Nutritional values are approximate and may vary by location or preparation.
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-gray-500 text-sm py-6 mt-12">
+  &copy; 2025 <span class="text-[#e31837] font-semibold">Pizza Hub 🍕</span>. All rights reserved.
+</footer>
+
+<!-- JS -->
+<script>
+  // Mobile menu toggle
+  document.getElementById("menuToggle").addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+  });
+  document.getElementById("menuClose").addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.add("hidden");
+  });
+
+  // Update cart badge count from localStorage
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    document.getElementById("cart-count").innerText = cart.length;
+    document.getElementById("cart-count-mobile").innerText = cart.length;
+  }
+  document.addEventListener("DOMContentLoaded", updateCartCount);
+</script>
+
+<!-- Fade-in Animation -->
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+<!-- //footer -->
+<footer class="bg-[#e31837] text-white">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
+
+    <!-- Brand Section -->
+    <div>
+      <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
+        <span class="text-yellow-400">🍕</span> Pizza Hub
+      </h2>
+      <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
+
+      <!-- Social Icons -->
+      <div class="flex gap-4 mt-4 text-lg">
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="flex flex-col gap-3 text-sm font-medium">
+      <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+      <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
+      <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
+      <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
+      <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="flex flex-col gap-3 text-sm font-medium">
+      <h3 class="text-lg font-semibold mb-2">Contact</h3>
+      <p>📞 +91 98765 43210</p>
+      <p>✉️ support@pizzahub.com</p>
+      <p>📍 Bhubaneswar, Odisha</p>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
+    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+    <div class="flex gap-4 text-sm">
+      <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
+      <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

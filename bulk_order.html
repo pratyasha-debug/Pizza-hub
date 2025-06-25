@@ -1,36 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Your Cart | Pizza Hub</title>
   <meta charset="UTF-8">
+  <title>Bulk Order | Pizza Hub 🍕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 font-sans">
 
 <!-- Navbar -->
 <nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
   <a href="index.html" class="flex items-center gap-3">
-    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
-      🍕
-    </div>
-    <h1 class="text-2xl font-extrabold tracking-wide font-sans">Pizza <span class="text-yellow-300">Hub</span></h1>
+    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">🍕</div>
+    <h1 class="text-2xl font-extrabold tracking-wide">Pizza <span class="text-yellow-300">Hub</span></h1>
   </a>
 
-  <!-- Navigation Links -->
-  <div class="hidden md:flex space-x-6 text-lg font-medium">
+  <div class="hidden md:flex space-x-6 text-lg font-medium items-center">
     <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
-    <a href="order_history.html" class="hover:text-yellow-300 transition">Order History</a>
+    <a href="order_history.html" class="hover:text-yellow-300 transition">Orders</a>
     <a href="cart.html" class="relative hover:text-yellow-300 transition">
-      Cart
-      <span id="cart-count"
-        class="absolute -top-3 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
     </a>
     <a href="feedback.html" class="hover:text-yellow-300 transition">Feedback</a>
   </div>
 
-  <!-- Mobile Menu Icon -->
   <button id="menuToggle" class="md:hidden text-3xl focus:outline-none"><i class="fas fa-bars"></i></button>
 </nav>
 
@@ -38,87 +33,58 @@
 <div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
   <button id="menuClose" class="text-white text-3xl self-end focus:outline-none">✕</button>
   <a href="index.html" class="text-white text-lg hover:text-yellow-300">Home</a>
-  <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Order History</a>
+  <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Orders</a>
   <a href="cart.html" class="text-white text-lg hover:text-yellow-300 relative">
     Cart
-    <span id="cart-count-mobile"
-      class="absolute -top-2 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+    <span id="cart-count-mobile" class="absolute -top-2 -right-6 bg-yellow-400 text-[#e31837] rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
   </a>
   <a href="feedback.html" class="text-white text-lg hover:text-yellow-300">Feedback</a>
 </div>
 
-<div class="max-w-4xl mx-auto p-6 bg-white mt-6 rounded-lg shadow space-y-6">
-  <div id="cartItems" class="space-y-4"></div>
-  <div id="emptyMessage" class="text-center text-gray-600 text-lg hidden">Your cart is empty.</div>
-  <div id="cartSummary" class="text-right space-y-3 hidden">
-    <div class="text-xl font-bold">Total: ₹<span id="cartTotal"></span></div>
-    <button onclick="proceedToCheckout()"
-      class="bg-[#e31837] text-white px-6 py-3 rounded-md hover:bg-[#c7152f] text-base font-semibold transition">
-      Proceed to Checkout
-    </button>
-  </div>
+<!-- Page Heading -->
+<div class="text-center py-10 animate-fade-in">
+  <h2 class="text-4xl font-extrabold text-gray-800">Bulk Order Request</h2>
+  <p class="text-gray-500 mt-2 text-lg">Order for parties, events & corporate lunches 🍕🎉</p>
 </div>
 
+<!-- Form -->
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-md space-y-5 animate-fade-in">
+  <form id="bulkOrderForm">
+    <div>
+      <label for="name" class="block text-gray-700 font-medium mb-2">Contact Name</label>
+      <input type="text" id="name" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
+    </div>
+
+    <div>
+      <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
+      <input type="tel" id="phone" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
+    </div>
+
+    <div>
+      <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+      <input type="email" id="email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
+    </div>
+
+    <div>
+      <label for="orderDetails" class="block text-gray-700 font-medium mb-2">Order Details</label>
+      <textarea id="orderDetails" rows="5" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+        placeholder="Mention quantity, pizza types, delivery time, location etc."></textarea>
+    </div>
+
+    <button type="submit"
+      class="w-full bg-red-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-red-600 transition flex items-center justify-center gap-2">
+      📨 Send Request
+    </button>
+  </form>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-gray-500 text-sm py-6 mt-12">
+  &copy; 2025 <span class="text-[#e31837] font-semibold">Pizza Hub 🍕</span>. All rights reserved.
+</footer>
+
+<!-- JS -->
 <script>
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartItemsDiv = document.getElementById("cartItems");
-  const cartSummary = document.getElementById("cartSummary");
-  const emptyMessage = document.getElementById("emptyMessage");
-
-  if (cart.length === 0) {
-    emptyMessage.classList.remove("hidden");
-  } else {
-    let total = 0;
-    cart.forEach((item, index) => {
-      const itemTotal = item.price;
-      total += itemTotal;
-      const itemDiv = document.createElement("div");
-      itemDiv.className = "flex items-center gap-4 border-b pb-4";
-      itemDiv.innerHTML = `
-        <img src="${item.image}" class="w-24 h-24 object-cover rounded-lg">
-        <div class="flex-1">
-          <h3 class="text-lg font-bold text-gray-800">${item.name}</h3>
-          <p class="text-gray-500">Qty: ${item.quantity}</p>
-          <p class="text-yellow-600 font-semibold mt-1">₹${item.price}</p>
-        </div>
-        <button onclick="removeItem(${index})" class="text-red-600 text-sm hover:underline">Remove</button>
-      `;
-      cartItemsDiv.appendChild(itemDiv);
-    });
-
-    document.getElementById("cartTotal").innerText = total;
-    cartSummary.classList.remove("hidden");
-  }
-
-  function removeItem(index) {
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    location.reload();
-  }
-
-  function proceedToCheckout() {
-    window.location.href = "checkout.html";
-  }
-
-  // Cart badge update
-  function updateCartCount() {
-    const count = cart.length;
-    const desktopBadge = document.getElementById("cart-count");
-    const mobileBadge = document.getElementById("cart-count-mobile");
-
-    if (count > 0) {
-      desktopBadge.innerText = count;
-      desktopBadge.classList.remove("hidden");
-      mobileBadge.innerText = count;
-      mobileBadge.classList.remove("hidden");
-    } else {
-      desktopBadge.classList.add("hidden");
-      mobileBadge.classList.add("hidden");
-    }
-  }
-
-  updateCartCount();
-
   // Mobile menu toggle
   document.getElementById("menuToggle").addEventListener("click", () => {
     document.getElementById("mobileMenu").classList.toggle("hidden");
@@ -127,7 +93,35 @@
     document.getElementById("mobileMenu").classList.add("hidden");
   });
 
+  // Cart count updater
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.length;
+    const badge = document.getElementById("cart-count");
+    const badgeMobile = document.getElementById("cart-count-mobile");
+    if (badge) badge.innerText = count;
+    if (badgeMobile) badgeMobile.innerText = count;
+  }
+  document.addEventListener("DOMContentLoaded", updateCartCount);
+
+  // Form submit
+  document.getElementById("bulkOrderForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    alert("✅ Bulk order request submitted successfully! 🍕🎉");
+    this.reset();
+  });
 </script>
+
+<!-- Simple Fade-in Animation -->
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 <!-- //footer -->
 <footer class="bg-[#e31837] text-white">
   <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">

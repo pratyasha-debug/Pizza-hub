@@ -1,213 +1,224 @@
-// Add to Cart
+// =================== Session Handling ===================
+
+function checkUserSession() {
+  const user = JSON.parse(localStorage.getItem('sessionUser'));
+  const guest = localStorage.getItem('guestSession');
+  toggleSignupModal(!user && !guest);
+  updateUserDisplay();
+  toggleLoginButton(!user);
+}
+
+function toggleSignupModal(show) {
+  const signupModal = document.getElementById('signupModal');
+  if (signupModal) signupModal.style.display = show ? 'flex' : 'none';
+}
+
+function toggleLoginButton(show) {
+  const loginBtn = document.querySelector('#sidebar a[href="login.html"]');
+  if (loginBtn) loginBtn.style.display = show ? 'block' : 'none';
+}
+
+function updateUserDisplay() {
+  const user = JSON.parse(localStorage.getItem('sessionUser'));
+  if (!user) return;
+  const locEl = document.getElementById('userLocation');
+  const sideEl = document.getElementById('sidebarUserName');
+  const locationText = user.location ? ` 📍 ${user.location}` : '';
+  if (locEl) locEl.innerText = `👤 ${user.name}${locationText}`;
+  if (sideEl) sideEl.innerHTML = `<i class="fas fa-user-circle"></i> ${user.name}`;
+}
+
+// =================== Cart ===================
+
 function addToCart(name, price, image) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
   cart.push({ name, price, image });
   localStorage.setItem('cart', JSON.stringify(cart));
-  alert(`${name} added to cart!`);
+  showToast(`🛒 ${name} added to cart!`);
   updateCartCount();
 }
 
-// Update Cart Count Badge (both desktop & mobile)
 function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const countDesktop = document.getElementById('cart-count');
-  const countMobile = document.getElementById('cart-count-mobile');
-
-  if (countDesktop) countDesktop.textContent = cart.length;
-  if (countMobile) countMobile.textContent = cart.length;
-}
-
-// Load Cart Items on Cart Page
-function loadCartItems() {
-  const container = document.getElementById('cartItems');
-  if (container) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let total = 0;
-    container.innerHTML = '';
-
-    cart.forEach((item, index) => {
-      let div = document.createElement('div');
-      div.className = 'flex items-center justify-between border p-3 bg-white rounded';
-      div.innerHTML = `
-        <div class="flex items-center">
-          <img src="${item.image}" class="w-16 h-16 object-cover rounded mr-3">
-          <span class="text-lg">${item.name} (₹${item.price})</span>
-        </div>
-        <button onclick="removeItem(${index})" class="text-red-600 text-xl">❌</button>
-      `;
-      container.appendChild(div);
-      total += item.price;
-    });
-
-    document.getElementById('cartTotal').textContent = `Total: ₹${total}`;
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const count = cart.length;
+  if (document.getElementById("cart-count")) {
+    document.getElementById("cart-count").innerText = count;
+  }
+  if (document.getElementById("cart-count-mobile")) {
+    document.getElementById("cart-count-mobile").innerText = count;
   }
 }
 
-// Remove Item from Cart
-function removeItem(index) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  cart.splice(index, 1);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-  loadCartItems();
+
+// =================== Mobile Menu ===================
+
+document.getElementById("menuToggle")?.addEventListener('click', () => {
+  document.getElementById("mobileMenu")?.classList.toggle("hidden");
+});
+
+document.getElementById("menuClose")?.addEventListener('click', () => {
+  document.getElementById("mobileMenu")?.classList.add("hidden");
+});
+
+function toggleSidebar() {
+  document.getElementById("sidebar")?.classList.toggle("hidden");
 }
 
-// Handle Order Form Submission
-function handleOrderForm() {
-  const form = document.getElementById('orderForm');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const mobile = document.getElementById('mobile').value;
-      const address = document.getElementById('address').value;
-      const city = document.getElementById('city').value;
+// =================== Category Filter ===================
 
-      if (!name || !mobile || !address || !city) {
-        alert('Please fill all fields.');
-        return;
-      }
+function selectCategory(categoryName) {
+  document.querySelectorAll('[data-category]').forEach(card => {
+    card.style.display = (categoryName === 'all' || card.dataset.category === categoryName) ? 'block' : 'none';
+  });
+}
 
-      localStorage.setItem('customerDetails', JSON.stringify({ name, mobile, address, city }));
-      window.location.href = 'order-summary.html';
-    });
+function showAllCategoryPizzas() {
+  document.querySelectorAll('[data-category]').forEach(card => card.style.display = 'block');
+}
+
+// =================== Service Filter ===================
+
+function selectService(serviceType) {
+  document.querySelectorAll('[data-service]').forEach(card => {
+    card.style.display = (card.dataset.service === serviceType) ? 'block' : 'none';
+  });
+  showToast(`${serviceType} selected!`);
+}
+
+function showAllServicePizzas() {
+  document.querySelectorAll('[data-service]').forEach(card => card.style.display = 'block');
+}
+
+// =================== UI Helpers ===================
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black text-white text-sm px-4 py-2 rounded shadow-lg z-50';
+  toast.innerText = message;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+    setTimeout(() => toast.remove(), 500);
+  }, 2000);
+}
+
+function showAlert(message) {
+  const alertBox = document.getElementById('locationAlert');
+  if (alertBox) {
+    alertBox.innerText = message;
+    alertBox.classList.add('show');
+    setTimeout(() => alertBox.classList.remove('show'), 3000);
+  } else {
+    alert(message);
   }
 }
 
-// Load Order Summary Page
-function loadOrderSummary() {
-  const summary = document.getElementById('orderSummary');
-  if (summary) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let customer = JSON.parse(localStorage.getItem('customerDetails')) || {};
-    let total = 0;
-    summary.innerHTML = '';
+// =================== Mapbox API ===================
 
-    cart.forEach(item => {
-      let p = document.createElement('p');
-      p.textContent = `${item.name} - ₹${item.price}`;
-      summary.appendChild(p);
-      total += item.price;
-    });
+const mapboxToken = 'pk.eyJ1IjoicHJhdHlhc2hhcHJpeWEiLCJhIjoiY201cjJtcWx5MDZmeDJsc2U5MmJ1cGJwYyJ9.KGW8blaBqPAOHSOjynk3Xw';
 
-    document.getElementById('totalAmount').textContent = `Total: ₹${total}`;
-    document.getElementById('customerDetails').innerHTML = `
-      <p><strong>Name:</strong> ${customer.name}</p>
-      <p><strong>Mobile:</strong> ${customer.mobile}</p>
-      <p><strong>Address:</strong> ${customer.address}</p>
-      <p><strong>City:</strong> ${customer.city}</p>
-    `;
-
-    // Clear cart & details after displaying
-    localStorage.removeItem('cart');
-    localStorage.removeItem('customerDetails');
-    updateCartCount();
-  }
+function getLocation() {
+  if (!navigator.geolocation) return showAlert("⚠️ Geolocation not supported.");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude, longitude } = pos.coords;
+    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.features.length) {
+          document.getElementById('userLocation').innerText = `📍 ${data.features[0].place_name}`;
+          showToast("📍 Location Detected!");
+        } else showToast("⚠️ Location not found.");
+      })
+      .catch(() => showToast("⚠️ Error contacting Mapbox."));
+  }, err => showToast("⚠️ " + err.message));
 }
 
-// Signup
-function signupUser() {
-  const name = document.getElementById("signupName").value;
-  const email = document.getElementById("signupEmail").value;
-  const password = document.getElementById("signupPassword").value;
+function autoDetectLocation() {
+  if (!navigator.geolocation) return showAlert("⚠️ Geolocation not supported.");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude, longitude } = pos.coords;
+    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.features.length) {
+          document.getElementById('signupLocation').value = data.features[0].place_name;
+          showToast("📍 Location Auto-filled!");
+        } else showToast("⚠️ Location not found.");
+      })
+      .catch(() => showToast("⚠️ Error contacting Mapbox."));
+  }, err => showToast("⚠️ " + err.message));
+}
 
-  if (!name || !email || !password) {
-    alert("Please fill all fields.");
+// =================== Auth ===================
+
+function createAccount() {
+  const name = document.getElementById('signupName').value.trim();
+  const password = document.getElementById('signupPassword').value.trim();
+  let location = document.getElementById('signupLocation').value.trim();
+
+  if (!name || !password) {
+    alert("Please enter both name and password!");
     return;
   }
 
-  localStorage.setItem("pizzaUser", JSON.stringify({ name, email, password }));
-  alert("Signup successful! Please login now.");
-  window.location.href = "login.html";
+  if (!location) location = 'Not Provided';
+
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+
+  if (users.find(u => u.name === name)) {
+    alert("Username already exists!");
+    return;
+  }
+
+  users.push({ name, password, location });
+  localStorage.setItem('users', JSON.stringify(users));
+
+  showToast(`🍕 Account created, ${name}!`);
+  setTimeout(() => window.location.href = 'login.html', 1200);
 }
 
-// Login
 function loginUser() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-  const savedUser = JSON.parse(localStorage.getItem("pizzaUser"));
+  const name = document.getElementById('loginName').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
 
-  if (savedUser && email === savedUser.email && password === savedUser.password) {
-    localStorage.setItem("loggedInUser", JSON.stringify(savedUser));
-    alert("Login successful!");
-    window.location.href = "index.html";
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+  const matchedUser = users.find(u => u.name === name && u.password === password);
+
+  if (matchedUser) {
+    localStorage.setItem('sessionUser', JSON.stringify(matchedUser));
+    showToast(`🍕 Welcome, ${name}!`);
+    setTimeout(() => window.location.href = 'index.html', 1000);
   } else {
-    alert("Invalid email or password.");
+    alert("Invalid name or password.");
   }
 }
 
-// Show User Info / Login Links in Navbar (Desktop & Mobile)
-function checkLoginStatus() {
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
-  const headerArea = document.getElementById("userAreaHeader");
-  const mobileArea = document.getElementById("userAreaMobile");
-
-  let html = '';
-
-  if (user) {
-    html = `<span class="mr-3">Hi, ${user.name}</span> <a href="#" onclick="logoutUser()" class="underline">Logout</a>`;
-  } else {
-    html = `
-      <a href="login.html" class="underline mr-3">Login</a>
-      <a href="signup.html" class="underline">Sign Up</a>
-    `;
-  }
-
-  if (headerArea) headerArea.innerHTML = html;
-  if (mobileArea) mobileArea.innerHTML = html;
-}
-
-// Logout
 function logoutUser() {
-  localStorage.removeItem("loggedInUser");
-  window.location.reload();
+  localStorage.removeItem('sessionUser');
+  localStorage.removeItem('cart');
+  localStorage.removeItem('guestSession');
+  localStorage.setItem('logoutSuccess', '1');
+  window.location.href = 'index.html';
 }
 
-// Protect Restricted Pages
-function protectPage() {
-  if (!localStorage.getItem("loggedInUser")) {
-    alert("Please login first.");
-    window.location.href = "login.html";
-  }
+function skipSignup() {
+  document.getElementById('signupModal').style.display = 'none';
+  localStorage.setItem('guestSession', '1');
+  showToast("👤 Continuing as Guest");
 }
 
-// Page Initialization
+// =================== On Page Load ===================
+
 document.addEventListener('DOMContentLoaded', () => {
+  checkUserSession();
   updateCartCount();
-  loadCartItems();
-  handleOrderForm();
-  loadOrderSummary();
-  checkLoginStatus();
+  
+  const category = new URLSearchParams(window.location.search).get('category');
+  category ? selectCategory(category) : showAllCategoryPizzas();
 
-  const restrictedPages = ['cart.html', 'order-summary.html'];
-  const currentPage = window.location.pathname.split("/").pop();
-  if (restrictedPages.includes(currentPage)) {
-    protectPage();
+  if (localStorage.getItem('logoutSuccess')) {
+    showToast("👋 Logged out successfully!");
+    localStorage.removeItem('logoutSuccess');
   }
 
-  // 🍕 Mobile Menu Toggle
-  const toggle = document.getElementById("menuToggle");
-  const mobile = document.getElementById("mobileMenu");
-  const closeBtn = document.getElementById("menuClose");
-
-  if (toggle && mobile) {
-    toggle.addEventListener("click", () => {
-      mobile.classList.remove("hidden");
-    });
-  }
-
-  if (closeBtn && mobile) {
-    closeBtn.addEventListener("click", () => {
-      mobile.classList.add("hidden");
-    });
-  }
-
-  // ✅ Login Form Handler
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      loginUser();
-    });
-  }
 });

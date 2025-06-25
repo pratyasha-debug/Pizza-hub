@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Customize Pizza | Pizza Hub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .optionBtn {
+      transition: all 0.2s ease;
+    }
+
+    .optionBtn.selected {
+      background-color: #fef3c7;
+      border-color: #facc15;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Navbar -->
+  <nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">🍕</div>
+      <h1 class="text-2xl font-extrabold tracking-wide font-sans">Pizza <span class="text-yellow-300">Hub</span></h1>
+    </a>
+    <div class="hidden md:flex space-x-6 text-lg font-medium items-center">
+      <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
+      <a href="order_history.html" class="hover:text-yellow-300 transition">Orders</a>
+      <div class="relative flex items-center">
+        <a href="cart.html" class="relative hover:text-yellow-300 transition">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cart-count" class="absolute -top-2 -right-3 bg-yellow-400 text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+        </a>
+      </div>
+      <a href="feedback.html" class="hover:text-yellow-300 transition">Feedback</a>
+    </div>
+    <button id="menuToggle" class="md:hidden text-3xl focus:outline-none"><i class="fas fa-bars"></i></button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
+    <button id="menuClose" class="text-white text-3xl self-end focus:outline-none">✕</button>
+    <a href="index.html" class="text-white text-lg hover:text-yellow-300">Home</a>
+    <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Orders</a>
+    <a href="cart.html" class="text-white text-lg hover:text-yellow-300 flex items-center gap-1">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Cart</span>
+    </a>
+    <a href="feedback.html" class="text-white text-lg hover:text-yellow-300">Feedback</a>
+  </div>
+
+  <!-- Customization Section -->
+  <div class="max-w-3xl mx-auto p-4 pb-24 space-y-8">
+
+    <!-- Pizza Preview -->
+    <div class="text-center space-y-3">
+      <div id="pizzaImageContainer"></div>
+      <h1 id="pizzaName" class="text-3xl font-bold text-gray-800">Custom Pizza</h1>
+      <p id="basePrice" class="text-lg text-gray-500">Base Price: ₹100</p>
+    </div>
+
+    <!-- Size -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Choose Size</h3>
+      <div class="flex gap-4 flex-wrap">
+        <button onclick="selectSize(this, 'Small', 100)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Small (₹100)</button>
+        <button onclick="selectSize(this, 'Medium', 150)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Medium (₹150)</button>
+        <button onclick="selectSize(this, 'Large', 200)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Large (₹200)</button>
+      </div>
+    </div>
+
+    <!-- Toppings -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Add Toppings (₹30 each)</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <button onclick="toggleOption(this, 'toppings', 'Extra Cheese', 30)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🧀 Extra Cheese</button>
+        <button onclick="toggleOption(this, 'toppings', 'Paneer', 30)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🥛 Paneer</button>
+        <button onclick="toggleOption(this, 'toppings', 'Jalapeno', 30)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🌶️ Jalapeno</button>
+        <button onclick="toggleOption(this, 'toppings', 'Olives', 30)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🫒 Olives</button>
+        <button onclick="toggleOption(this, 'toppings', 'Mushrooms', 30)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🍄 Mushrooms</button>
+      </div>
+    </div>
+
+    <!-- Crust -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Choose Crust</h3>
+      <div class="flex gap-4 flex-wrap">
+        <button onclick="selectOption(this, 'crust', 'Classic Hand Tossed')" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Classic Hand Tossed</button>
+        <button onclick="selectOption(this, 'crust', 'Cheese Burst', 50)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Cheese Burst (₹50)</button>
+        <button onclick="selectOption(this, 'crust', 'Wheat Thin Crust')" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Wheat Thin Crust</button>
+      </div>
+    </div>
+
+    <!-- Spice -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Spice Level</h3>
+      <div class="flex gap-4 flex-wrap">
+        <button onclick="selectOption(this, 'spice', 'Mild')" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Mild</button>
+        <button onclick="selectOption(this, 'spice', 'Medium')" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Medium</button>
+        <button onclick="selectOption(this, 'spice', 'Spicy')" class="optionBtn bg-gray-50 border p-3 rounded text-sm">Spicy</button>
+      </div>
+    </div>
+
+    <!-- Dips -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Add Dips (₹20 each)</h3>
+      <div class="flex gap-4 flex-wrap">
+        <button onclick="toggleOption(this, 'dips', 'Cheesy Dip', 20)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🧄 Cheesy Dip</button>
+        <button onclick="toggleOption(this, 'dips', 'Herb Dip', 20)" class="optionBtn bg-gray-50 border p-3 rounded text-sm">🌿 Herb Dip</button>
+      </div>
+    </div>
+
+    <!-- Quantity -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-gray-800">Quantity</h3>
+      <div class="flex items-center space-x-3">
+        <button onclick="adjustQuantity(-1)" class="bg-gray-200 hover:bg-gray-300 text-xl font-bold w-10 h-10 rounded">-</button>
+        <input type="number" id="quantity" value="1" min="1" class="border rounded w-20 p-2 text-center text-lg font-semibold">
+        <button onclick="adjustQuantity(1)" class="bg-gray-200 hover:bg-gray-300 text-xl font-bold w-10 h-10 rounded">+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sticky Price Bar -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex items-center justify-between shadow-lg min-h-[64px]">
+    <div class="text-xl font-bold text-gray-800">Total: ₹<span id="finalPrice">0</span></div>
+    <button onclick="addCustomizedPizza()" class="bg-[#e31837] text-white px-6 py-2 rounded-md hover:bg-[#c7152f] text-base font-semibold transition">Add to Cart</button>
+  </div>
+
+  <script src="js/customize.js"></script>
+<!-- //footer -->
+<footer class="bg-[#e31837] text-white">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
+
+    <!-- Brand Section -->
+    <div>
+      <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
+        <span class="text-yellow-400">🍕</span> Pizza Hub
+      </h2>
+      <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
+
+      <!-- Social Icons -->
+      <div class="flex gap-4 mt-4 text-lg">
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="flex flex-col gap-3 text-sm font-medium">
+      <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+      <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
+      <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
+      <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
+      <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="flex flex-col gap-3 text-sm font-medium">
+      <h3 class="text-lg font-semibold mb-2">Contact</h3>
+      <p>📞 +91 98765 43210</p>
+      <p>✉️ support@pizzahub.com</p>
+      <p>📍 Bhubaneswar, Odisha</p>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
+    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+    <div class="flex gap-4 text-sm">
+      <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
+      <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

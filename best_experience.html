@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Best Experience | Pizza Hub 🍕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fadeInUp 0.8s ease-out both; }
+
+    @keyframes bounce-slow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-bounce-slow { animation: bounce-slow 2s infinite; }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-yellow-50 to-orange-100 min-h-screen font-sans text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
+    <a href="index.html" class="flex items-center gap-2">
+      <div class="text-3xl animate-bounce-slow">🍕</div>
+      <h1 class="text-2xl font-extrabold tracking-wide">Pizza <span class="text-yellow-300">Hub</span></h1>
+    </a>
+    <div class="space-x-6 hidden md:flex text-lg">
+      <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
+      <a href="all_pizzas.html" class="hover:text-yellow-300 transition">Menu</a>
+      <a href="cart.html" class="hover:text-yellow-300 transition">Cart</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-20 fade-in-up">
+    <h2 class="text-5xl font-extrabold text-red-600 mb-4 animate-pulse">Experience Pizza Like Never Before 🍕</h2>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">Discover mouth-watering flavors, cheesy delights and hot offers served fresh at your fingertips.</p>
+    <a href="offer.html" class="inline-block bg-yellow-400 text-red-800 text-lg font-bold px-8 py-4 rounded-full hover:bg-yellow-500 transition transform hover:scale-105 duration-300">Grab Offers Now!</a>
+  </section>
+
+  <!-- Services Section -->
+  <section class="max-w-7xl mx-auto px-6 py-12">
+    <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">Why Pizza Hub?</h3>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300 text-center">
+        <i class="fa-solid fa-truck-fast text-red-600 text-4xl mb-4"></i>
+        <h4 class="font-bold text-lg mb-2">Fast Delivery</h4>
+        <p class="text-gray-600">Get your pizza at your doorstep hot & fresh in 30 minutes!</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300 text-center">
+        <i class="fa-solid fa-pizza-slice text-yellow-400 text-4xl mb-4"></i>
+        <h4 class="font-bold text-lg mb-2">Premium Quality</h4>
+        <p class="text-gray-600">We use the freshest ingredients and best recipes for every order.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-lg hover:scale-105 transition duration-300 text-center">
+        <i class="fa-solid fa-tag text-green-500 text-4xl mb-4"></i>
+        <h4 class="font-bold text-lg mb-2">Exclusive Offers</h4>
+        <p class="text-gray-600">Enjoy seasonal deals, cashback, and exciting combo discounts!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="bg-white py-16">
+    <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">What Our Customers Say</h3>
+    <div class="max-w-5xl mx-auto flex flex-wrap justify-center gap-8">
+      <div class="bg-yellow-50 p-6 rounded-lg shadow-md w-72 text-center hover:scale-105 transition duration-300">
+        <p class="text-gray-700 mb-4">“Best pizza I've ever had! The cheese burst is a game-changer!”</p>
+        <h5 class="font-bold text-red-600">- Anjali P.</h5>
+      </div>
+      <div class="bg-yellow-50 p-6 rounded-lg shadow-md w-72 text-center hover:scale-105 transition duration-300">
+        <p class="text-gray-700 mb-4">“Super fast delivery and amazing offers every week!”</p>
+        <h5 class="font-bold text-red-600">- Rohan S.</h5>
+      </div>
+      <div class="bg-yellow-50 p-6 rounded-lg shadow-md w-72 text-center hover:scale-105 transition duration-300">
+        <p class="text-gray-700 mb-4">“Love their customizable pizzas and dips! Totally worth it.”</p>
+        <h5 class="font-bold text-red-600">- Priya D.</h5>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="text-center py-16 fade-in-up">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Ready to Order Your Favorite Pizza?</h2>
+    <a href="all_pizzas.html" class="bg-red-600 text-white text-lg font-bold px-10 py-4 rounded-full hover:bg-red-700 transition transform hover:scale-105 duration-300">View Menu</a>
+  </section>
+
+ <!-- //footer -->
+ <footer class="bg-[#e31837] text-white">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
+  
+      <!-- Brand Section -->
+      <div>
+        <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
+          <span class="text-yellow-400">🍕</span> Pizza Hub
+        </h2>
+        <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
+  
+        <!-- Social Icons -->
+        <div class="flex gap-4 mt-4 text-lg">
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+  
+      <!-- Quick Links -->
+      <div class="flex flex-col gap-3 text-sm font-medium">
+        <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+        <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
+        <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
+        <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
+        <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
+      </div>
+  
+      <!-- Contact -->
+      <div class="flex flex-col gap-3 text-sm font-medium">
+        <h3 class="text-lg font-semibold mb-2">Contact</h3>
+        <p>📞 +91 98765 43210</p>
+        <p>✉️ support@pizzahub.com</p>
+        <p>📍 Bhubaneswar, Odisha</p>
+      </div>
+  
+    </div>
+  
+    <!-- Bottom Bar -->
+    <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
+      <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
+      <div class="flex gap-4 text-sm">
+        <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
+        <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+  
+
+</body>
+</html>
