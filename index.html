@@ -86,17 +86,28 @@
       <button onclick="toggleSidebar()" class="text-red-600 text-3xl">&times;</button>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- Profile Picture -->
+    <div class="mb-4 flex flex-col items-center">
+      <img id="profilePicture" src="default-avatar.png" alt="Profile Picture" class="w-24 h-24 rounded-full border-2 border-gray-300 object-cover">
+      <input type="file" id="profilePicInput" accept="image/*" class="hidden" onchange="uploadProfilePicture(event)">
+      <button onclick="document.getElementById('profilePicInput').click()" class="text-blue-500 text-xs mt-2 hover:underline">Change Picture</button>
+    </div>
+
+    <!-- Best Experience Button -->
     <a href="best_experience.html">
-      <button class="w-full bg-red-600 text-white py-2 rounded-lg mb-3 hover:bg-red-700 transition">
+      <button class="w-full bg-red-600 text-white py-2 rounded-lg mb-4 hover:bg-red-700 transition">
         ✨ Best Experience
       </button>
     </a>
-    
-    <a href="login.html" class="block w-full border py-2 rounded-lg text-center text-red-600 font-semibold mb-4 hover:bg-red-50 transition">🔐 Login</a>
+
+    <!-- Address Section with Map Detection -->
+    <div class="text-sm text-gray-600 mt-1 flex items-center gap-2">
+      📍 <span id="sidebarUserLocation">Not Provided</span>
+      
+    </div>
 
     <!-- Navigation Links -->
-    <nav class="border-t pt-4 space-y-3 text-lg font-medium text-gray-700">
+    <nav class="border-t pt-4 space-y-3 text-lg font-medium text-gray-700 mt-4">
       <a href="offer.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-fire"></i> Deals & Offers</a>
       <a href="track_order.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-receipt"></i> Track Order</a>
       <a href="order_history.html" class="flex items-center gap-2 hover:text-red-600 transition"><i class="fas fa-box"></i> Order History</a>
@@ -107,13 +118,17 @@
     </nav>
   </div>
 
-  <!-- Footer Logout -->
+  <!-- Logout Button -->
   <div class="border-t pt-4">
-    <button id="logoutBtn" onclick="logoutUser()" class="w-full border text-red-600 font-semibold py-2 rounded-lg hover:bg-red-50 transition flex items-center justify-center gap-2">
+    <button id="logoutBtn" onclick="logoutUser()" class="w-full border text-red-600 font-semibold py-2 rounded-lg hover:bg-red-50 transition flex items-center justify-center gap-2 hidden">
       <i class="fas fa-sign-out-alt"></i> Logout
     </button>
   </div>
+
 </div>
+
+
+
 <!-- Hero Section -->
 <section class="relative h-[650px] flex items-center justify-center text-center overflow-hidden font-sans">
 
@@ -266,7 +281,32 @@
     </a>
 
   </div>
+
 </section>
+
+<!-- Hero Video Section -->
+<section class="relative w-full h-screen overflow-hidden">
+  <!-- Background Video -->
+  <video 
+    src="videos/pizza.mp4"
+    autoplay muted loop playsinline
+    class="absolute inset-0 w-full h-full object-cover z-0">
+  </video>
+
+  <!-- Overlay Content -->
+  <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-center px-4 z-10">
+    <img src="https://static.vecteezy.com/system/resources/previews/000/576/961/original/gold-royal-crown-logo-template-illustration-design-vector-eps-10.jpg" alt="Crown Logo" class="w-24 h-24 object-contain mb-4">
+    <h1 class="text-4xl font-extrabold mb-3">Welcome to PizzaHub</h1>
+    <p class="text-lg mb-6 max-w-xl">Fresh, hot, and made with love. Order your favorite pizza now!</p>
+    <a href="#menu" class="bg-red-600 hover:bg-red-700 transition px-6 py-3 rounded-lg text-lg font-semibold">Order Now</a>
+  </div>
+</section>
+
+<!-- Cart Popup -->
+<div id="cartPopup"
+  class="fixed bottom-28 right-4 bg-green-600 text-white px-4 py-2 rounded shadow hidden z-50 text-sm font-medium">
+  Added to cart!
+</div>
 
 <!-- Cart Popup -->
 <div id="cartPopup"

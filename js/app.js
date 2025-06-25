@@ -1,11 +1,12 @@
 // =================== Session Handling ===================
 
+// Check session on page load
 function checkUserSession() {
   const user = JSON.parse(localStorage.getItem('sessionUser'));
   const guest = localStorage.getItem('guestSession');
   toggleSignupModal(!user && !guest);
   updateUserDisplay();
-  toggleLoginButton(!user);
+  updateSidebarAuthUI();
 }
 
 function toggleSignupModal(show) {
@@ -13,40 +14,91 @@ function toggleSignupModal(show) {
   if (signupModal) signupModal.style.display = show ? 'flex' : 'none';
 }
 
-function toggleLoginButton(show) {
-  const loginBtn = document.querySelector('#sidebar a[href="login.html"]');
-  const logoutBtn = document.getElementById('logoutBtn');
-
-  if (loginBtn) loginBtn.style.display = show ? 'block' : 'none';
-  if (logoutBtn) logoutBtn.style.display = show ? 'none' : 'block';
-}
+// Update sidebar with username and address
 function updateSidebarAuthUI() {
   const user = JSON.parse(localStorage.getItem('sessionUser'));
-  const loginButton = document.querySelector('#sidebar a[href="login.html"]');
   const userNameHeading = document.getElementById('sidebarUserName');
+  const userAddress = document.getElementById('sidebarUserLocation');
+  const profilePicture = document.getElementById('profilePicture');
   const logoutBtn = document.getElementById('logoutBtn');
 
-  if (user) {
-    if (loginButton) loginButton.style.display = "none";
-    if (logoutBtn) logoutBtn.style.display = "flex";
-    if (userNameHeading) userNameHeading.innerHTML = `<i class="fas fa-user-circle"></i> ${user.name}`;
-  } else {
-    if (loginButton) loginButton.style.display = "block";
-    if (logoutBtn) logoutBtn.style.display = "none";
-    if (userNameHeading) userNameHeading.innerHTML = `<i class="fas fa-user-circle"></i> Guest`;
+  // Set user name
+  if (userNameHeading) {
+    userNameHeading.innerHTML = `<i class="fas fa-user-circle"></i> ${user ? user.name : 'Guest'}`;
+  }
+
+  // Set address
+  if (userAddress) {
+    userAddress.innerHTML = user && user.location
+      ? `${user.location} <button onclick="editAddress()" class="text-blue-500 hover:underline text-xs ml-2">Edit</button>`
+      : `Not Provided <button onclick="editAddress()" class="text-blue-500 hover:underline text-xs ml-2">Add</button>`;
+  }
+
+  // Set profile picture
+  if (profilePicture) {
+    if (user && user.profilePic) {
+      profilePicture.src = user.profilePic;
+    } else {
+      profilePicture.src = 'default-avatar.png';  // fallback default pic
+    }
+  }
+
+  // Show/Hide logout button
+  if (logoutBtn) logoutBtn.style.display = user ? "flex" : "none";
+}
+
+function uploadProfilePicture(event) {
+  const user = JSON.parse(localStorage.getItem('sessionUser'));
+  if (!user) {
+    showToast("🔒 Please log in to set your profile picture.");
+    setTimeout(() => window.location.href = 'login.html', 1000);
+    return;
+  }
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    user.profilePic = e.target.result; // base64 image string
+    localStorage.setItem('sessionUser', JSON.stringify(user));
+    showToast("🖼️ Profile picture updated!");
+    updateSidebarAuthUI();
+  };
+  reader.readAsDataURL(file); // convert file to base64
+}
+
+
+// Prompt to edit address
+function editAddress() {
+  const user = JSON.parse(localStorage.getItem('sessionUser'));
+  if (!user) {
+    showToast("🔒 Please log in to set your address.");
+    setTimeout(() => window.location.href = 'login.html', 1000);
+    return;
+  }
+  
+
+  const newAddress = prompt("Enter your address:", user.location || "");
+  if (newAddress && newAddress.trim() !== "") {
+    user.location = newAddress.trim();
+    localStorage.setItem('sessionUser', JSON.stringify(user));
+    showToast("📍 Address updated!");
+    updateSidebarAuthUI();
   }
 }
 
-
-
+// Update main user display bar
 function updateUserDisplay() {
   const user = JSON.parse(localStorage.getItem('sessionUser'));
-  if (!user) return;
   const locEl = document.getElementById('userLocation');
-  const sideEl = document.getElementById('sidebarUserName');
-  const locationText = user.location ? ` 📍 ${user.location}` : '';
-  if (locEl) locEl.innerText = `👤 ${user.name}${locationText}`;
-  if (sideEl) sideEl.innerHTML = `<i class="fas fa-user-circle"></i> ${user.name}`;
+  const locationText = user && user.location ? ` 📍 ${user.location}` : '';
+  if (locEl) locEl.innerText = `👤 ${user ? user.name : 'Guest'}${locationText}`;
+}
+
+function toggleSidebar() {
+  document.getElementById("sidebar")?.classList.toggle("hidden");
+  updateSidebarAuthUI();
 }
 
 // =================== Cart ===================
@@ -70,7 +122,6 @@ function updateCartCount() {
   }
 }
 
-
 // =================== Mobile Menu ===================
 
 document.getElementById("menuToggle")?.addEventListener('click', () => {
@@ -80,12 +131,6 @@ document.getElementById("menuToggle")?.addEventListener('click', () => {
 document.getElementById("menuClose")?.addEventListener('click', () => {
   document.getElementById("mobileMenu")?.classList.add("hidden");
 });
-
-function toggleSidebar() {
-  document.getElementById("sidebar")?.classList.toggle("hidden");
-  updateSidebarAuthUI(); 
-}
-
 
 // =================== Category Filter ===================
 
@@ -136,7 +181,7 @@ function showAlert(message) {
   }
 }
 
-// =================== Mapbox API ===================
+// =================== Mapbox Location API ===================
 
 const mapboxToken = 'pk.eyJ1IjoicHJhdHlhc2hhcHJpeWEiLCJhIjoiY201cjJtcWx5MDZmeDJsc2U5MmJ1cGJwYyJ9.KGW8blaBqPAOHSOjynk3Xw';
 
@@ -150,22 +195,6 @@ function getLocation() {
         if (data.features.length) {
           document.getElementById('userLocation').innerText = `📍 ${data.features[0].place_name}`;
           showToast("📍 Location Detected!");
-        } else showToast("⚠️ Location not found.");
-      })
-      .catch(() => showToast("⚠️ Error contacting Mapbox."));
-  }, err => showToast("⚠️ " + err.message));
-}
-
-function autoDetectLocation() {
-  if (!navigator.geolocation) return showAlert("⚠️ Geolocation not supported.");
-  navigator.geolocation.getCurrentPosition(pos => {
-    const { latitude, longitude } = pos.coords;
-    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.features.length) {
-          document.getElementById('signupLocation').value = data.features[0].place_name;
-          showToast("📍 Location Auto-filled!");
         } else showToast("⚠️ Location not found.");
       })
       .catch(() => showToast("⚠️ Error contacting Mapbox."));
@@ -230,13 +259,13 @@ function skipSignup() {
   showToast("👤 Continuing as Guest");
 }
 
+
 // =================== On Page Load ===================
 
 document.addEventListener('DOMContentLoaded', () => {
   checkUserSession();
   updateCartCount();
-  updateSidebarAuthUI(); 
-  
+
   const category = new URLSearchParams(window.location.search).get('category');
   category ? selectCategory(category) : showAllCategoryPizzas();
 
@@ -244,5 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast("👋 Logged out successfully!");
     localStorage.removeItem('logoutSuccess');
   }
+});  
 
-});
+

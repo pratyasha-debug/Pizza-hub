@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Checkout | Pizza Hub 🍕</title>
@@ -9,194 +10,175 @@
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans">
-<!-- Navbar -->
-<nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
-  <a href="index.html" class="flex items-center gap-3">
-    <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
-      🍕
-    </div>
-    <h1 class="text-2xl font-extrabold tracking-wide font-sans">Pizza <span class="text-yellow-300">Hub</span></h1>
-  </a>
 
-  <div class="hidden md:flex space-x-6 text-lg font-medium">
-    <a href="index.html" class="hover:text-yellow-300 transition">Home</a>
-    <a href="order_history.html" class="hover:text-yellow-300 transition">Order History</a>
-    <a href="cart.html" class="relative hover:text-yellow-300 transition">
-      Cart
-      <span id="cart-count"
-        class="absolute -top-3 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
+  <!-- Navbar -->
+  <nav class="bg-red-600 p-4 text-white flex justify-between items-center shadow-lg sticky top-0 z-50">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="bg-yellow-400 text-[#e31837] rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-inner hover:rotate-12 transition duration-300">
+        🍕
+      </div>
+      <h1 class="text-2xl font-extrabold tracking-wide">Pizza <span class="text-yellow-300">Hub</span></h1>
     </a>
-    <a href="feedback.html" class="text-yellow-300">Feedback</a>
-  </div>
+  </nav>
 
-  <button id="menuToggle" class="md:hidden text-3xl focus:outline-none"><i class="fas fa-bars"></i></button>
-</nav>
+  <!-- Checkout Section -->
+  <section class="max-w-2xl mx-auto p-6 mt-8 space-y-8">
 
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="hidden fixed inset-0 bg-red-600 flex flex-col items-start p-6 space-y-6 z-50 md:hidden">
-  <button id="menuClose" class="text-white text-3xl self-end focus:outline-none">✕</button>
-  <a href="index.html" class="text-white text-lg hover:text-yellow-300">Home</a>
-  <a href="order_history.html" class="text-white text-lg hover:text-yellow-300">Order History</a>
-  <a href="cart.html" class="relative text-white text-lg hover:text-yellow-300">
-    Cart
-    <span id="cart-count-mobile"
-      class="absolute -top-2 -right-4 bg-yellow-400 text-red-700 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full hidden"></span>
-  </a>
-  <a href="feedback.html" class="text-yellow-300">Feedback</a>
-</div>
-
-  <!-- Checkout Form -->
-  <section class="max-w-2xl mx-auto p-6 mt-8">
-    <h2 class="text-3xl font-bold text-center mb-8">Checkout 📦</h2>
+    <h2 class="text-3xl font-bold text-center">Checkout 📦</h2>
 
     <form id="orderForm" class="space-y-5 bg-white shadow-lg rounded-lg p-8">
 
-      <input id="name" type="text" placeholder="Full Name"
-        class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none"
-        required>
+      <input id="name" type="text" placeholder="Full Name" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none" required>
 
-      <input id="mobile" type="tel" placeholder="Mobile Number" maxlength="10"
-        class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none"
-        required>
+      <input id="mobile" type="tel" placeholder="Mobile Number" maxlength="10" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none" required>
 
-      <textarea id="address" placeholder="Delivery Address" rows="3"
-        class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none"
-        required></textarea>
+      <textarea id="address" placeholder="Delivery Address" rows="3" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none" required></textarea>
 
-      <input id="city" type="text" placeholder="Pincode / City"
-        class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none"
-        required>
+      <input id="city" type="text" placeholder="Pincode / City" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-red-400 outline-none" required>
 
-      <div class="text-xl font-semibold text-gray-700 border-t pt-5">Total Amount: ₹<span id="cartTotal">0</span></div>
+      <div class="text-lg font-semibold border-t pt-5">Total Amount: ₹<span id="cartTotal">0</span></div>
 
-      <button type="submit"
-        class="bg-green-600 text-white py-3 w-full rounded text-lg hover:bg-green-700 transition-all duration-300">
-        ✅ Complete Order
-      </button>
+      <h3 class="text-xl font-bold mt-5">Payment Method 💳</h3>
+      <div class="space-y-3">
+        <label><input type="radio" name="paymentMethod" value="Cash on Delivery" class="accent-red-600" checked> Cash on Delivery</label>
+        <label><input type="radio" name="paymentMethod" value="UPI / Wallet" class="accent-red-600"> UPI / Wallet</label>
+        <label><input type="radio" name="paymentMethod" value="Credit / Debit Card" class="accent-red-600"> Credit / Debit Card</label>
+      </div>
+
+      <!-- Dynamic payment fields area -->
+      <div id="paymentDetails" class="space-y-4 hidden mt-5"></div>
+
+      <h3 class="text-xl font-bold mt-5">Apply Coupon 🎁</h3>
+      <div class="flex gap-3">
+        <input id="couponInput" type="text" placeholder="Enter coupon code" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none">
+        <button type="button" onclick="applyCoupon()" class="bg-yellow-400 text-red-700 font-semibold px-4 py-3 rounded hover:bg-yellow-300 transition">Apply</button>
+      </div>
+
+      <p id="discountMsg" class="text-green-600 font-medium hidden">✅ ₹50 off applied!</p>
+
+      <button type="submit" class="bg-green-600 text-white py-3 w-full rounded text-lg hover:bg-green-700 transition">✅ Complete Order</button>
 
     </form>
+
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-red-600 text-white text-center py-6 mt-10">
-    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
-    <div class="mt-3 space-x-6 text-2xl">
-      <a href="#" class="hover:text-yellow-300" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a href="#" class="hover:text-yellow-300" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="hover:text-yellow-300" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+  <footer class="bg-[#e31837] text-white mt-12">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between gap-6">
+      <div>
+        <h2 class="text-2xl font-extrabold flex items-center gap-2 mb-3"><span class="text-yellow-400">🍕</span> Pizza Hub</h2>
+        <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025.</p>
+      </div>
+      <div class="flex flex-col gap-2 text-sm">
+        <h3 class="text-lg font-semibold mb-1">Quick Links</h3>
+        <a href="#" class="hover:text-yellow-300">Menu</a>
+        <a href="#" class="hover:text-yellow-300">Offers</a>
+        <a href="#" class="hover:text-yellow-300">About Us</a>
+        <a href="#" class="hover:text-yellow-300">Support</a>
+      </div>
+      <div class="flex flex-col gap-2 text-sm">
+        <h3 class="text-lg font-semibold mb-1">Contact</h3>
+        <p>📞 +91 98765 43210</p>
+        <p>✉️ support@pizzahub.com</p>
+        <p>📍 Bhubaneswar, Odisha</p>
+      </div>
     </div>
+    <div class="border-t border-white/20 text-center text-xs py-4">&copy; 2025 Pizza Hub. All rights reserved.</div>
   </footer>
 
   <script>
-    // Mobile menu toggle
-    document.getElementById("menuToggle").onclick = () => {
-      document.getElementById("mobileMenu").classList.toggle("hidden");
-    };
-    document.getElementById("menuClose").onclick = () => {
-      document.getElementById("mobileMenu").classList.add("hidden");
-    };
-
-    // Load cart total
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     let total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
     document.getElementById("cartTotal").innerText = total;
+    let discount = 0;
 
-    // Order form submission
-    document.getElementById("orderForm").onsubmit = (e) => {
-  e.preventDefault();
-
-  if (cart.length === 0) {
-    alert("🛑 Your cart is empty! Please add some items.");
-    return;
-  }
-
-  const name = document.getElementById("name").value;
-  const mobile = document.getElementById("mobile").value;
-  const address = document.getElementById("address").value;
-  const city = document.getElementById("city").value;
-
-  // Build order details object
-  const orderDetails = {
-    name,
-    mobile,
-    address,
-    city,
-    items: cart
-  };
-
-  localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
-  localStorage.removeItem("cart");
-
-  alert("✅ Your order has been placed successfully! 🍕🎉\nEstimated Delivery: 30-40 mins");
-  window.location.href = "order_summary.html";
-};
-
-    function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const count = cart.length;
-    const desktopBadge = document.getElementById("cart-count");
-    const mobileBadge = document.getElementById("cart-count-mobile");
-
-    if (count > 0) {
-      desktopBadge.innerText = count;
-      desktopBadge.classList.remove("hidden");
-      mobileBadge.innerText = count;
-      mobileBadge.classList.remove("hidden");
-    } else {
-      desktopBadge.classList.add("hidden");
-      mobileBadge.classList.add("hidden");
+    function applyCoupon() {
+      const coupon = document.getElementById("couponInput").value.trim();
+      if (coupon === "PIZZA50") {
+        discount = 50;
+        document.getElementById("discountMsg").classList.remove("hidden");
+        document.getElementById("cartTotal").innerText = total - discount;
+      } else {
+        alert("❌ Invalid coupon. Try PIZZA50");
+      }
     }
-  }
 
-  updateCartCount();
+    function handlePaymentDetails() {
+      const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const paymentDetails = document.getElementById("paymentDetails");
+      paymentDetails.innerHTML = '';
+
+      if (selectedMethod === 'UPI / Wallet') {
+        paymentDetails.classList.remove("hidden");
+        paymentDetails.innerHTML = `<input type="text" id="upiId" placeholder="Enter your UPI ID" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none" required>`;
+      } else if (selectedMethod === 'Credit / Debit Card') {
+        paymentDetails.classList.remove("hidden");
+        paymentDetails.innerHTML = `
+          <input type="text" id="cardNumber" placeholder="Card Number" class="border border-gray-300 p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none" maxlength="16" required>
+          <div class="flex gap-4 mt-3">
+            <input type="text" id="cardExpiry" placeholder="MM/YY" class="border border-gray-300 p-3 w-1/2 rounded focus:ring-2 focus:ring-yellow-400 outline-none" required>
+            <input type="password" id="cardCVV" placeholder="CVV" class="border border-gray-300 p-3 w-1/2 rounded focus:ring-2 focus:ring-yellow-400 outline-none" maxlength="3" required>
+          </div>
+        `;
+      } else {
+        paymentDetails.classList.add("hidden");
+      }
+    }
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
+      input.addEventListener('change', handlePaymentDetails);
+    });
+
+    document.getElementById("orderForm").onsubmit = (e) => {
+      e.preventDefault();
+      if (cart.length === 0) {
+        alert("🛑 Your cart is empty! Please add some items.");
+        return;
+      }
+
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+      if (paymentMethod === 'UPI / Wallet' && !document.getElementById("upiId")?.value.trim()) {
+        alert("Please enter your UPI ID.");
+        return;
+      }
+
+      if (paymentMethod === 'Credit / Debit Card') {
+        const cardNumber = document.getElementById("cardNumber")?.value.trim();
+        const cardExpiry = document.getElementById("cardExpiry")?.value.trim();
+        const cardCVV = document.getElementById("cardCVV")?.value.trim();
+        if (!cardNumber || !cardExpiry || !cardCVV) {
+          alert("Please fill in all card details.");
+          return;
+        }
+      }
+
+      const name = document.getElementById("name").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const city = document.getElementById("city").value.trim();
+
+      if (!name || !mobile || !address || !city) {
+        alert("Please fill in all delivery details.");
+        return;
+      }
+
+      const orderDetails = {
+        name,
+        mobile,
+        address,
+        city,
+        items: cart,
+        paymentMethod,
+        discount: discount,
+        totalAmount: total - discount
+      };
+
+      localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
+      localStorage.removeItem("cart");
+      alert(`✅ Your order via ${paymentMethod} has been placed successfully! 🍕🎉\nEstimated Delivery: 30-40 mins`);
+      window.location.href = "order_summary.html";
+    };
   </script>
-<!-- //footer -->
-<footer class="bg-[#e31837] text-white">
-  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-start gap-6">
 
-    <!-- Brand Section -->
-    <div>
-      <h2 class="text-2xl font-extrabold tracking-wide flex items-center gap-2 mb-3">
-        <span class="text-yellow-400">🍕</span> Pizza Hub
-      </h2>
-      <p class="text-sm text-gray-200">Serving hot, cheesy happiness since 2025. Order now and satisfy your cravings!</p>
-
-      <!-- Social Icons -->
-      <div class="flex gap-4 mt-4 text-lg">
-        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="hover:text-yellow-300 transition"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-
-    <!-- Quick Links -->
-    <div class="flex flex-col gap-3 text-sm font-medium">
-      <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
-      <a href="#menu" class="hover:text-yellow-300 transition">Menu</a>
-      <a href="offer.html" class="hover:text-yellow-300 transition">Offers</a>
-      <a href="terms_and_conditions.html" class="hover:text-yellow-300 transition">About Us</a>
-      <a href="support.html" class="hover:text-yellow-300 transition">Support</a>
-    </div>
-
-    <!-- Contact -->
-    <div class="flex flex-col gap-3 text-sm font-medium">
-      <h3 class="text-lg font-semibold mb-2">Contact</h3>
-      <p>📞 +91 98765 43210</p>
-      <p>✉️ support@pizzahub.com</p>
-      <p>📍 Bhubaneswar, Odisha</p>
-    </div>
-
-  </div>
-
-  <!-- Bottom Bar -->
-  <div class="border-t border-white border-opacity-20 text-center text-xs py-3 px-6 flex flex-wrap justify-between items-center">
-    <p>&copy; 2025 Pizza Hub. All rights reserved.</p>
-    <div class="flex gap-4 text-sm">
-      <a href="#" class="hover:text-yellow-300 transition">Privacy Policy</a>
-      <a href="#" class="hover:text-yellow-300 transition">Terms of Service</a>
-    </div>
-  </div>
-</footer>
 </body>
 </html>
