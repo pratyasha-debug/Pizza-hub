@@ -20,6 +20,23 @@ function toggleLoginButton(show) {
   if (loginBtn) loginBtn.style.display = show ? 'block' : 'none';
   if (logoutBtn) logoutBtn.style.display = show ? 'none' : 'block';
 }
+function updateSidebarAuthUI() {
+  const user = JSON.parse(localStorage.getItem('sessionUser'));
+  const loginButton = document.querySelector('#sidebar a[href="login.html"]');
+  const userNameHeading = document.getElementById('sidebarUserName');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (user) {
+    if (loginButton) loginButton.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "flex";
+    if (userNameHeading) userNameHeading.innerHTML = `<i class="fas fa-user-circle"></i> ${user.name}`;
+  } else {
+    if (loginButton) loginButton.style.display = "block";
+    if (logoutBtn) logoutBtn.style.display = "none";
+    if (userNameHeading) userNameHeading.innerHTML = `<i class="fas fa-user-circle"></i> Guest`;
+  }
+}
+
 
 
 function updateUserDisplay() {
@@ -66,8 +83,9 @@ document.getElementById("menuClose")?.addEventListener('click', () => {
 
 function toggleSidebar() {
   document.getElementById("sidebar")?.classList.toggle("hidden");
-  checkUserSession(); 
+  updateSidebarAuthUI(); 
 }
+
 
 // =================== Category Filter ===================
 
@@ -217,6 +235,7 @@ function skipSignup() {
 document.addEventListener('DOMContentLoaded', () => {
   checkUserSession();
   updateCartCount();
+  updateSidebarAuthUI(); 
   
   const category = new URLSearchParams(window.location.search).get('category');
   category ? selectCategory(category) : showAllCategoryPizzas();
