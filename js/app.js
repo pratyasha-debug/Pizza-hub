@@ -15,8 +15,12 @@ function toggleSignupModal(show) {
 
 function toggleLoginButton(show) {
   const loginBtn = document.querySelector('#sidebar a[href="login.html"]');
+  const logoutBtn = document.getElementById('logoutBtn');
+
   if (loginBtn) loginBtn.style.display = show ? 'block' : 'none';
+  if (logoutBtn) logoutBtn.style.display = show ? 'none' : 'block';
 }
+
 
 function updateUserDisplay() {
   const user = JSON.parse(localStorage.getItem('sessionUser'));
