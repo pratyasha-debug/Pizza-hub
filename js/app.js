@@ -3,11 +3,13 @@
 // Check session on page load
 function checkUserSession() {
   const user = JSON.parse(localStorage.getItem('sessionUser'));
-  const guest = localStorage.getItem('guestSession');
-  toggleSignupModal(!user && !guest);
+  console.log("Session Check:", {user});
+  toggleSignupModal(!user);
   updateUserDisplay();
   updateSidebarAuthUI();
 }
+
+
 
 function toggleSignupModal(show) {
   const signupModal = document.getElementById('signupModal');
@@ -21,6 +23,8 @@ function updateSidebarAuthUI() {
   const userAddress = document.getElementById('sidebarUserLocation');
   const profilePicture = document.getElementById('profilePicture');
   const logoutBtn = document.getElementById('logoutBtn');
+
+  
 
   // Set user name
   if (userNameHeading) {
@@ -239,11 +243,19 @@ function loginUser() {
   if (matchedUser) {
     localStorage.setItem('sessionUser', JSON.stringify(matchedUser));
     showToast(`🍕 Welcome, ${name}!`);
+
+    // Hide signup modal or signup button immediately
+    const signupModal = document.getElementById('signupModal');
+    const signupBtn = document.getElementById('signupBtn');
+    if (signupModal) signupModal.style.display = 'none';
+    if (signupBtn) signupBtn.style.display = 'none';
+
     setTimeout(() => window.location.href = 'index.html', 1000);
   } else {
     alert("Invalid name or password.");
   }
 }
+
 
 function logoutUser() {
   localStorage.removeItem('sessionUser');
@@ -259,6 +271,10 @@ function skipSignup() {
   showToast("👤 Continuing as Guest");
 }
 
+function showSignupModal() {
+  document.getElementById('signupModal').style.display = 'flex';
+}
+
 
 // =================== On Page Load ===================
 
@@ -272,6 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('logoutSuccess')) {
     showToast("👋 Logged out successfully!");
     localStorage.removeItem('logoutSuccess');
+  }
+  const user = JSON.parse(localStorage.getItem('sessionUser'));
+  if (user) {
+    const signupBtn = document.getElementById('signupBtn');
+    if (signupBtn) signupBtn.style.display = 'none';
   }
 });  
 
